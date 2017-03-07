@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.6)
+set(CMAKE_FIND_LIBRARY_PREFIXES /usr/lib)
+set(CMAKE_FIND_LIBRARY_SUFFIXES .so)
+set(Boost_INCLUDE_DIR /usr/include)
+set(Boost_LIBRARY_DIR /usr/lib)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost REQUIRED COMPONENTS )
+
+project(Uservices)
+
+set(CMAKE_CXX_STANDARD 14)
+include_directories("/usr/local/include" "/usr/include" )
+set(SOURCE_FILES examples/Simple_Microservice/example1.cpp Microservices/Uservice_Interface.h transport/Endpoint.h)
+add_executable(Uservices ${SOURCE_FILES})
+target_link_libraries(Uservices net_static pthread)
