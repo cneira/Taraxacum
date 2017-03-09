@@ -23,23 +23,31 @@
 #include "../Microservices/Uservice_Interface.h"
 #include "pistache/endpoint.h"
 #include <functional>
+#include <memory>
+#include <type_traits>
 
 using namespace Net;
-using namespace std::placeholders;
+
 class Endpoint : public Http::Handler, public Decorator {
-private:
-    std::string answer;
 public:
-  HTTP_PROTOTYPE(Endpoint)
-  Endpoint() = default;
+    Endpoint() = default;
   Endpoint(Uservice_Interface *usvc) : Decorator(usvc){};
 
-  void onRequest(const Http::Request &request, Http::ResponseWriter response) {
-    response.send(Http::Code::Ok,"Hello Hello");
+HTTP_PROTOTYPE(Endpoint)
+//    std::shared_ptr<Net::Tcp::Handler> clone(Uservice_Interface* usvc) const {
+//        return std::make_shared<Endpoint>(usvc) ;
+//    } typedef Net::Http::details::prototype_tag tag;
+//
+//    std::shared_ptr<Net::Tcp::Handler> clone() const {
+//        return std::make_shared<Endpoint>() ;
+//    } typedef Net::Http::details::prototype_tag tag;
 
+  void onRequest(const Http::Request &request, Http::ResponseWriter response) {
+    response.send(Http::Code::Ok, "nada");
   }
 
-  void Answer(int port) {
+
+    void Answer(int port) {
     Decorator::Answer(port);
     try {
       std::cout << "Http Endpoint starting" << std::endl;
@@ -50,6 +58,5 @@ public:
       std::cout << "Address Already in use port :" << port << std::endl;
     }
   }
-
 };
 #endif // USERVICES_ENDPOINT_H

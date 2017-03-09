@@ -24,19 +24,21 @@
 #include <functional>
 #include <iostream>
 #include <string>
+#include "pistache/endpoint.h"
 
-using namespace std::placeholders;
+using namespace Net;
 
 class Uservice_Interface {
 
 public:
   virtual void Publish() = 0;
-  virtual void Answer(int port)= 0;
+
+    virtual void Answer(int port) = 0;
   virtual void Measure() = 0;
   virtual void Log() = 0;
   virtual void Circuit_Break() = 0;
-  virtual const std::string Exec(const std::string in) = 0;
 };
+
 
 class Uservice : public Uservice_Interface {
 
@@ -50,10 +52,8 @@ public:
   void Publish() {
     std::cout << "Publish Uservice " << this->name << std::endl;
   }
-
   void Answer(int port) {
     std::cout << "Uservice Answering on Port " << port << std::endl;
-
   }
 
   void Measure() { std::cout << " Uservice Measure" << std::endl; }
@@ -63,25 +63,16 @@ public:
   void Circuit_Break() {
     std::cout << " Uservice Circuite Breaker " << std::endl;
   }
-  const std::string Exec(const std::string in) { std::cout <<" Executing bizz logic" <<std::endl;}
-};
 
-class myservice : public Uservice {
-public:
-  int  err_cnt, ok_cnt;
-  std::string name, version;
-  myservice() = default;
-  myservice(const std::string _name, const std::string _ver)
-      : name(_name), version(_ver){};
-
-  const std::string Exec(std::string in) {
-      return in += "wat";
+    const std::string Do(std::string in) {
+        std::cout << " Executing bizz logic" << std::endl;
   }
+
 };
 
 class Decorator : public Uservice_Interface {
 
-private:
+protected:
   Uservice_Interface *usvc;
 
 public:
@@ -90,16 +81,14 @@ public:
 
   void Publish() { usvc->Publish(); }
 
-  void Answer(int port) {
-    usvc->Answer(port);
-  }
+    void Answer(int port) { usvc->Answer(port); }
 
   void Measure() { usvc->Measure(); }
 
   void Log() { usvc->Log(); }
 
   void Circuit_Break() { usvc->Circuit_Break(); }
-  const std::string Exec(const std::string in) { usvc->Exec(in);};
+
 };
 
 class Publisher : public Decorator {
@@ -140,5 +129,6 @@ public:
     std::cout << "CircuitBreaker here" << std::endl;
   }
 };
+
 
 #endif // USERVICES_USERVICE_INTERFACE_H

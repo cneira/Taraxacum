@@ -1,5 +1,5 @@
 /*
- * Simple example using the framework.
+ *  Simple example using the framework.
  *  Copyright (C) Carlos Neira <cneirabustos@gmail.com>
  *
  * This program is free software ; you can redistribute it and/or modify
@@ -20,13 +20,45 @@
 #include <iostream>
 #include "../../Microservices/Uservice_Interface.h"
 #include "../../transport/Endpoint.h"
+#include <functional>
+
+class myservice : public Uservice, public Http::Handler {
+public:
+    int err_cnt, ok_cnt;
+    std::string name, version;
+    std::function<std::string(std::string)> sol;
+
+    myservice() = default;
+
+    myservice(const std::string _name, const std::string _ver, std::function<std::string(std::string)> f)
+            : name(_name), version(_ver), sol(f) {};
+
+
+HTTP_PROTOTYPE(myservice)
+
+    void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
+        response.send(Http::Code::Ok, sol("aa"));
+    }
+
+    void Answer(int port) {
+        try {
+            std::cout << "Http Endpoint starting" << std::endl;
+            std::string saddress = "*:" + std::to_string(port);
+            std::cout << "Address " << saddress << std::endl;
+            Http::listenAndServe<myservice>(saddress);
+        } catch (std::runtime_error &e) {
+            std::cout << "Address Already in use port :" << port << std::endl;
+        }
+    }
+
+};
 
 int main() {
-
-    Uservice_Interface* usvc = new Endpoint (new Publisher ( new Logging (new CircuitBreaker(new myservice("micro","1.2")))));
+    auto fp = [](auto a) -> std::string { return "hohoho"; };
+    Uservice_Interface *usvc = new Publisher(new Logging(new Endpoint(new myservice("micro", "1.2", fp))));
     usvc->Log();
     usvc->Circuit_Break();
     usvc->Publish();
-    usvc->Answer(9097);
+    usvc->Answer(9001);
     return 0;
 }
