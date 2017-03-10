@@ -21,10 +21,10 @@
 #ifndef USERVICES_USERVICE_INTERFACE_H
 #define USERVICES_USERVICE_INTERFACE_H
 
+#include "pistache/endpoint.h"
 #include <functional>
 #include <iostream>
 #include <string>
-#include "pistache/endpoint.h"
 
 using namespace Net;
 
@@ -38,7 +38,6 @@ public:
   virtual void Log() = 0;
   virtual void Circuit_Break() = 0;
 };
-
 
 class Uservice : public Uservice_Interface {
 
@@ -63,11 +62,6 @@ public:
   void Circuit_Break() {
     std::cout << " Uservice Circuite Breaker " << std::endl;
   }
-
-    const std::string Do(std::string in) {
-        std::cout << " Executing bizz logic" << std::endl;
-  }
-
 };
 
 class Decorator : public Uservice_Interface {
@@ -88,7 +82,6 @@ public:
   void Log() { usvc->Log(); }
 
   void Circuit_Break() { usvc->Circuit_Break(); }
-
 };
 
 class Publisher : public Decorator {
@@ -129,6 +122,5 @@ public:
     std::cout << "CircuitBreaker here" << std::endl;
   }
 };
-
 
 #endif // USERVICES_USERVICE_INTERFACE_H

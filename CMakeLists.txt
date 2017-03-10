@@ -12,6 +12,6 @@ project(Uservices)
 
 set(CMAKE_CXX_STANDARD 14)
 include_directories("/usr/local/include" "/usr/include" )
-set(SOURCE_FILES examples/Simple_Microservice/example1.cpp Microservices/Uservice_Interface.h transport/Endpoint.h)
+set(SOURCE_FILES examples/Simple_Microservice/example1.cpp Common/Uservice_Interface.h transport/Endpoint.h Common/Microservice.h)
 add_executable(Uservices ${SOURCE_FILES})
 target_link_libraries(Uservices net_static pthread)
