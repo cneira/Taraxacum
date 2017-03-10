@@ -13,6 +13,10 @@ if (RapidJSON_FOUND)
     include_directories(${RapidJSON_INCLUDE_DIRS})
 endif ()
 
+if (LOG4CPP_FOUND)
+    include_directories(${LOG4CPP_INCLUDE_DIRS})
+endif ()
+
 project(Uservices)
 
 
