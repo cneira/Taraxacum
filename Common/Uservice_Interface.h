@@ -64,14 +64,15 @@ public:
   }
 };
 
-class Decorator : public Uservice_Interface {
+class Provider : public Uservice_Interface {
 
 protected:
   Uservice_Interface *usvc;
 
 public:
-  Decorator(Uservice_Interface *_usvc) : usvc(_usvc){};
-  Decorator() = default;
+    Provider(Uservice_Interface *_usvc) : usvc(_usvc) {};
+
+    Provider() = default;
 
   void Publish() { usvc->Publish(); }
 
@@ -84,43 +85,6 @@ public:
   void Circuit_Break() { usvc->Circuit_Break(); }
 };
 
-class Publisher : public Decorator {
 
-public:
-  Publisher(Uservice_Interface *usvc) : Decorator(usvc){};
-
-  void Publish() {
-    Decorator::Publish();
-    std::cout << "Publisher adding " << std::endl;
-  }
-};
-
-class Metrics : public Decorator {
-public:
-  Metrics(Uservice_Interface *usvc) : Decorator(usvc){};
-
-  void Measure() {
-    Decorator::Measure();
-    std::cout << "Metrics Here" << std::endl;
-  }
-};
-
-class Logging : public Decorator {
-public:
-  Logging(Uservice_Interface *usvc) : Decorator(usvc){};
-  void Log() {
-    Decorator::Log();
-    std::cout << "Logging here " << std::endl;
-  }
-};
-
-class CircuitBreaker : public Decorator {
-public:
-  CircuitBreaker(Uservice_Interface *usvc) : Decorator(usvc){};
-  void Circuit_Break() {
-    Decorator::Circuit_Break();
-    std::cout << "CircuitBreaker here" << std::endl;
-  }
-};
 
 #endif // USERVICES_USERVICE_INTERFACE_H

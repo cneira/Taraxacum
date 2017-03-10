@@ -17,25 +17,32 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "../../Common/Uservice_Interface.h"
 #include "../../Common/Microservice.h"
 
 #include <iostream>
 
+namespace microservices {
 struct Service {
-    const std::string operator()(std::string icr) {
-        return "got this request " + icr;
-    };
+    const std::string operator()(std::string request) { return "Hello Hello "; };
 };
-
+}
 
 int main() {
-    std::cout << "Service name " << std::endl;
+
     Uservice_Interface *usvc =
-            new Publisher(new Logging(new Microservice<Service>));
+            AddProviders<Publisher, Logging, CircuitBreaker,
+                    Microservice<microservices::Service>>();
+
+    // Call the providers that decorate this microservice
+
     usvc->Log();
     usvc->Circuit_Break();
     usvc->Publish();
+    usvc->Measure();
+
+    // Start listening for requests
+
     usvc->Answer(9004);
+
     return 0;
 }

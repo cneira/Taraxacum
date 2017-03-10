@@ -1,5 +1,5 @@
 /*
- * Microservice Class
+ * Microservice Template Class
  *
  *
  *  Copyright (C) Carlos Neira <cneirabustos@gmail.com>
@@ -22,6 +22,9 @@
 #define USERVICES_MICROSERVICE_H
 
 #include "Uservice_Interface.h"
+#include "../Providers/circuitbreaker/CircuitBreaker.h"
+#include "../Providers/log/Logging.h"
+#include "../Providers/service discovery/Publisher.h"
 
 template<typename F>
 class Microservice : public Uservice, public Http::Handler {
@@ -54,5 +57,19 @@ HTTP_PROTOTYPE(Microservice)
         }
     }
 };
+
+// This allows us to prettify the decorator pattern when adding more providers
+// to a microservice.
+// the last class instantiated should always be the Microservice.
+// Example:
+// AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
+
+template<typename T>
+T *AddProviders() { return new T; }
+
+template<typename T, typename Arg1, typename... Args>
+T *AddProviders() {
+    return new T(AddProviders<Arg1, Args...>());
+}
 
 #endif // USERVICES_MICROSERVICE_H
