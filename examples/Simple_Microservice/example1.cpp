@@ -29,8 +29,8 @@
 // RestService consumes json using rapidjson lib using the example at
 // https://github.com/miloyip/rapidjson
 // You could test the RestService
-// curl -i -H "Accept: apppplication/json" -X POST -d
-// '{"project":"uservices","stars": 11}' http://localhost:9029
+// curl -i -H "Accept: application/json" -X POST -d
+// '{"project":"uservices","stars": 10}' http://localhost:9029
 
 namespace microservices {
 struct Service {
@@ -42,7 +42,7 @@ struct Service {
     struct RestService {
         const std::string operator()(std::string http_request) {
             rapidjson::Document d;
-            const char *json = "{\"project\":\"rapidjson\",\"stars\":10}";
+
             std::cout << "Incoming --> " << http_request << std::endl;
             d.Parse(http_request.data());
             // 2. Modify it by DOM.
