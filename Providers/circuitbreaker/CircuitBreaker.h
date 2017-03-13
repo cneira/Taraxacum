@@ -10,7 +10,7 @@
 
 class CircuitBreaker : public Provider {
 public:
-    CircuitBreaker(Uservice_Interface *usvc) : Provider(usvc) {};
+    CircuitBreaker(std::shared_ptr<Uservice_Interface> usvc) : Provider(usvc) {};
 
     void Circuit_Break() {
         Provider::Circuit_Break();

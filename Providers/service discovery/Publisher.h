@@ -10,7 +10,7 @@
 class Publisher : public Provider {
 
 public:
-    Publisher(Uservice_Interface *usvc) : Provider(usvc) {};
+    Publisher(std::shared_ptr<Uservice_Interface> usvc) : Provider(usvc) {};
 
     void Publish() {
         Provider::Publish();

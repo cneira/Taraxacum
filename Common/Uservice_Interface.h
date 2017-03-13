@@ -67,10 +67,10 @@ public:
 class Provider : public Uservice_Interface {
 
 protected:
-  Uservice_Interface *usvc;
+  std::shared_ptr<Uservice_Interface> usvc;
 
 public:
-    Provider(Uservice_Interface *_usvc) : usvc(_usvc) {};
+    Provider(std::shared_ptr<Uservice_Interface> _usvc) : usvc(_usvc) {};
 
     Provider() = default;
 

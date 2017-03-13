@@ -10,6 +10,11 @@ find_package(Boost REQUIRED COMPONENTS )
 
 project(Uservices)
 
+if (LOG4CPP_FOUND)
+    include_directories(${LOG4CPP_INCLUDE_DIRS})
+endif ()
+
+
 set(CMAKE_CXX_STANDARD 14)
 include_directories("/usr/local/include" "/usr/include" )
 set(SOURCE_FILES examples/Simple_Microservice/example1.cpp Microservices/Uservice_Interface.h transport/Endpoint.h)

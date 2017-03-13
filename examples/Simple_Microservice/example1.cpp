@@ -18,9 +18,7 @@
  */
 
 #include "../../Common/Microservice.h"
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+
 #include <iostream>
 
 // a Service is just defined as a functor holding the logic you will add to the
@@ -41,10 +39,16 @@ struct Service {
 
     struct RestService {
         const std::string operator()(std::string http_request) {
+
             rapidjson::Document d;
 
-            std::cout << "Incoming --> " << http_request << std::endl;
-            d.Parse(http_request.data());
+            if (d.Parse(http_request.data()).HasParseError())
+            {
+                std::cout << "Error parsing json" <<std::endl;
+               // throw std::invalid_argument("json parse error");
+                return "{\"err:\" \"error parsing json\" }";
+            }
+
             // 2. Modify it by DOM.
             rapidjson::Value &s = d["stars"];
             s.SetInt(s.GetInt() + 1);
@@ -62,12 +66,13 @@ struct Service {
 
 int main() {
 
-    Uservice_Interface *usvc =
-            AddProviders<Publisher, Logging, CircuitBreaker,
-                    Microservice<microservices::RestService>>();
-
     // Call the providers that decorate this microservice, you could add more
     // taking a look at the Providers folder
+
+  std::shared_ptr<Uservice_Interface> usvc =
+            AddProviders_shared<CircuitBreaker,Logging,Publisher,
+                    Microservice<microservices::RestService>>();
+
 
     usvc->Log();
     usvc->Circuit_Break();
