@@ -1,10 +1,10 @@
 language: cpp
+sudo: required
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y cmake rapidjson boost-devel
-sudo: required
+  - sudo apt-get install rapidjson-dev
 dist: trusty
-script: mkdir build && cd build && cmake .. && make
+script: mkdir deps && cd deps && git clone https://github.com/oktal/pistache.git && cd pistache   && mkdir build && cd build && cmake .. && make install && cd ../../../ && mkdir build && cd build && cmake .. && make
 compiler:
     - clang
     - gcc
