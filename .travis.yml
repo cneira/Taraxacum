@@ -1,4 +1,7 @@
 language: cpp
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y cmake rapidjson boost-devel
 sudo: required
 dist: trusty
 script: mkdir build && cd build && cmake .. && make
