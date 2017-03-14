@@ -20,7 +20,6 @@ endif ()
 
 project(example1)
 
-
 set(CMAKE_CXX_STANDARD 14)
 include_directories("/usr/local/include" "/usr/include" )
 set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp Common/Uservice_Interface.h Common/Microservice.h Providers/metrics/Metrics.h Providers/log/Logging.h Providers/circuitbreaker/CircuitBreaker.h)
