@@ -23,7 +23,6 @@
 
 #include "../Providers/circuitbreaker/CircuitBreaker.h"
 #include "../Providers/log/Logging.h"
-#include "../Providers/service discovery/Publisher.h"
 #include "Uservice_Interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -118,11 +117,7 @@ public:
  AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
 */
 
-template <typename T> T *AddProviders() { return new T; }
 
-template <typename T, typename Arg1, typename... Args> T *AddProviders() {
-  return new T(AddProviders<Arg1, Args...>());
-}
 //
 template <typename T> std::shared_ptr<T> AddProviders_shared() {
   return std::shared_ptr<T>(new T);

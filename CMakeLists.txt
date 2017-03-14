@@ -18,11 +18,16 @@ if (LOG4CPP_FOUND)
     include_directories(${LOG4CPP_INCLUDE_DIRS})
 endif ()
 
-project(Uservices)
+project(example1)
 
 
 set(CMAKE_CXX_STANDARD 14)
 include_directories("/usr/local/include" "/usr/include" )
-set(SOURCE_FILES examples/Simple_Microservice/example1.cpp Common/Uservice_Interface.h Providers/transport/Endpoint.h Common/Microservice.h "Providers/service discovery/Publisher.h" Providers/metrics/Metrics.h Providers/log/Logging.h Providers/circuitbreaker/CircuitBreaker.h)
-add_executable(Uservices ${SOURCE_FILES})
-target_link_libraries(Uservices net_static pthread)
+set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp Common/Uservice_Interface.h Common/Microservice.h Providers/metrics/Metrics.h Providers/log/Logging.h Providers/circuitbreaker/CircuitBreaker.h)
+set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp Common/Uservice_Interface.h Common/Microservice.h Providers/metrics/Metrics.h Providers/log/Logging.h Providers/circuitbreaker/CircuitBreaker.h)
+
+
+add_executable(Rest_example ${SOURCE_FILES})
+target_link_libraries(Rest_example net_static pthread)
+add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
+target_link_libraries(Rest_routing_Example net_static pthread)
