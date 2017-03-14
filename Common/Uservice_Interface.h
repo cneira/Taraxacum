@@ -22,18 +22,23 @@
 #define USERVICES_USERVICE_INTERFACE_H
 
 #include "pistache/endpoint.h"
+#include "pistache/router.h"
+#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <string>
 
 using namespace Net;
 
+enum class HTTP_METHOD : std::int8_t { GET = 1, POST = 2, PUT = 3, DELETE = 4 };
+
 class Uservice_Interface {
 
 public:
   virtual void Publish() = 0;
-
-    virtual void Answer(int port) = 0;
+  virtual void Answer(int port, int threads) = 0;
+  virtual void Answer(int port, int threads, const char *route,
+                      HTTP_METHOD http_method) = 0;
   virtual void Measure() = 0;
   virtual void Log() = 0;
   virtual void Circuit_Break() = 0;
@@ -51,8 +56,14 @@ public:
   void Publish() {
     std::cout << "Publish Uservice " << this->name << std::endl;
   }
-  void Answer(int port) {
+  void Answer(int port, int threads) {
     std::cout << "Uservice Answering on Port " << port << std::endl;
+  }
+  void Answer(int port, int threads, const char *route,
+              HTTP_METHOD http_method) {
+    std::cout << "Uservice Answering on Port "
+              << port
+              << "route is" << route << std::endl;
   }
 
   void Measure() { std::cout << " Uservice Measure" << std::endl; }
@@ -70,13 +81,17 @@ protected:
   std::shared_ptr<Uservice_Interface> usvc;
 
 public:
-    Provider(std::shared_ptr<Uservice_Interface> _usvc) : usvc(_usvc) {};
+  Provider(std::shared_ptr<Uservice_Interface> _usvc) : usvc(_usvc){};
 
-    Provider() = default;
+  Provider() = default;
 
   void Publish() { usvc->Publish(); }
 
-    void Answer(int port) { usvc->Answer(port); }
+  void Answer(int port, int threads) { usvc->Answer(port, threads); }
+  void Answer(int port, int threads, const char *route,
+              HTTP_METHOD http_method) {
+    usvc->Answer(port, threads, route, http_method);
+  }
 
   void Measure() { usvc->Measure(); }
 
@@ -84,7 +99,5 @@ public:
 
   void Circuit_Break() { usvc->Circuit_Break(); }
 };
-
-
 
 #endif // USERVICES_USERVICE_INTERFACE_H

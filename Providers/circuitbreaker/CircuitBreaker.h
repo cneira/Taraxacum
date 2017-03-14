@@ -11,6 +11,7 @@
 class CircuitBreaker : public Provider {
 public:
     CircuitBreaker(std::shared_ptr<Uservice_Interface> usvc) : Provider(usvc) {};
+    int threshold_trx;
 
     void Circuit_Break() {
         Provider::Circuit_Break();

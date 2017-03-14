@@ -21,88 +21,140 @@
 #ifndef USERVICES_MICROSERVICE_H
 #define USERVICES_MICROSERVICE_H
 
-#include "Uservice_Interface.h"
 #include "../Providers/circuitbreaker/CircuitBreaker.h"
 #include "../Providers/log/Logging.h"
 #include "../Providers/service discovery/Publisher.h"
+#include "Uservice_Interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
-#include "log4cpp/Category.hh"
-#include "log4cpp/Appender.hh"
-#include "log4cpp/OstreamAppender.hh"
-#include "log4cpp/FileAppender.hh"
-#include "log4cpp/Layout.hh"
-#include "log4cpp/BasicLayout.hh"
-#include "log4cpp/Priority.hh"
-#include "log4cpp/NDC.hh"
-#include "log4cpp/PropertyConfigurator.hh"
 
-#define CODE_LOCATION __FILE__
-
-
-#define LOG_EMERG(__logstream)  __logstream << log4cpp::Priority::EMERG << CODE_LOCATION
-#define LOG_ALERT(__logstream)  __logstream << log4cpp::Priority::ALERT << CODE_LOCATION
-#define LOG_CRIT(__logstream)  __logstream << log4cpp::Priority::CRIT << CODE_LOCATION
-#define LOG_ERROR(__logstream)  __logstream << log4cpp::Priority::ERROR << CODE_LOCATION
-#define LOG_WARN(__logstream)  __logstream << log4cpp::Priority::WARN << CODE_LOCATION
-#define LOG_NOTICE(__logstream)  __logstream << log4cpp::Priority::NOTICE << CODE_LOCATION
-#define LOG_INFO(__logstream)  __logstream << log4cpp::Priority::INFO << CODE_LOCATION
-#define LOG_DEBUG(__logstream)  __logstream << log4cpp::Priority::DEBUG << CODE_LOCATION
-
-template<typename F>
+using namespace Net::Rest;
+template <typename F>
 class Microservice : public Uservice, public Http::Handler {
 private:
-    std::string microservice_response;
+  std::string microservice_response;
 
-    void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
-        try {
-            microservice_response = F()(Request.body());
-        } catch (std::bad_function_call &e) {
-            std::cout << "Service does not provided Function to serve" << std::endl;
-            return;
-        }
-        response.send(Http::Code::Ok, microservice_response);
-    }
+  void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
+    microservice_response = F()(Request.body());
+    response.send(Http::Code::Ok, microservice_response);
+  }
 
 public:
-    Microservice() = default;
+  Microservice() = default;
 
-HTTP_PROTOTYPE(Microservice)
+  HTTP_PROTOTYPE(Microservice)
 
-    void Answer(int port) {
-        try {
-            std::cout << "Http Endpoint starting" << std::endl;
-            std::string saddress = "*:" + std::to_string(port);
-            std::cout << "Address " << saddress << std::endl;
-            Http::listenAndServe<Microservice>(saddress);
-        } catch (std::runtime_error &e) {
-            std::cout << "Address Already in use port :" << port << std::endl;
-        }
+  void Answer(int port, int threads) {
+    try {
+      std::cout << "Http Endpoint starting" << std::endl;
+      std::string saddress = "*:" + std::to_string(port);
+      std::cout << "Address " << saddress << std::endl;
+      auto opts = Http::Endpoint::options().threads(threads);
+      Http::listenAndServe<Microservice>(saddress, opts);
+    } catch (std::runtime_error &e) {
+      std::cout << "Address Already in use port :" << port << std::endl;
+      std::cout << "Stack:" << e.what() << std::endl;
     }
+  }
 };
 
-// This allows us to prettify the decorator pattern when adding more providers
-// to a microservice.
-// the last class instantiated should always be the Microservice.
-// Example:
-// AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
+template <void (*F)(const Rest::Request &, Http::ResponseWriter)>
+class Routing_Microservice : public Uservice {
+private:
+  std::string microservice_response;
 
-template<typename T>
-T *AddProviders() { return new T;  }
+public:
+  Routing_Microservice() = default;
 
-template<typename T, typename Arg1, typename... Args>
-T *AddProviders() {
-    return new T(AddProviders<Arg1, Args...>());
+  void Answer(int port, int threads, const char *route,
+              HTTP_METHOD http_method) {
+    try {
+
+      Router router;
+      std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
+      std::cout << "Http Endpoint starting" << std::endl;
+      Net::Port _port(port);
+      Net::Address addr(Net::Ipv4::any(), port);
+      httpEndpoint = std::make_shared<Net::Http::Endpoint>(addr);
+
+      auto opts = Net::Http::Endpoint::options().threads(threads).flags(
+          Net::Tcp::Options::InstallSignalHandler);
+
+      httpEndpoint->init(opts);
+
+      switch (http_method) {
+
+      case HTTP_METHOD::GET:
+        Routes::Get(router, route, Routes::bind(F));
+        break;
+      case HTTP_METHOD::POST:
+        Routes::Post(router, route, Routes::bind(F));
+        break;
+      case HTTP_METHOD::PUT:
+        Routes::Put(router, route, Routes::bind(F));
+        break;
+      case HTTP_METHOD::DELETE:
+        Routes::Delete(router, route, Routes::bind(F));
+        break;
+
+      }
+      httpEndpoint->setHandler(router.handler());
+      std::cout << "Start serving" << std::endl;
+      httpEndpoint->serve();
+
+    } catch (std::runtime_error &e) {
+      std::cout << "Address Already in use port :" << port << std::endl;
+      std::cout << "Stack:" << e.what() << std::endl;
+    }
+  }
+};
+
+/*
+ This allows us to prettify the decorator pattern when adding more providers
+ to a microservice.
+ the last class instantiated should always be the Microservice.
+ Example:
+ AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
+*/
+
+template <typename T> T *AddProviders() { return new T; }
+
+template <typename T, typename Arg1, typename... Args> T *AddProviders() {
+  return new T(AddProviders<Arg1, Args...>());
 }
 //
-template<typename T>
-std::shared_ptr<T> AddProviders_shared() { return  std::shared_ptr<T> (new T);  }
-
-template<typename T, typename Arg1, typename... Args>
-std::shared_ptr<T> AddProviders_shared() {
-    return std::shared_ptr<T>( new T(AddProviders_shared<Arg1, Args...>()));
+template <typename T> std::shared_ptr<T> AddProviders_shared() {
+  return std::shared_ptr<T>(new T);
 }
 
+template <typename T, typename Arg1, typename... Args>
+std::shared_ptr<T> AddProviders_shared() {
+  return std::shared_ptr<T>(new T(AddProviders_shared<Arg1, Args...>()));
+}
+/*
+   Template for microservices, in this case this service will handle json
+   requests.
+   The caller just needs to define a functor that takes a ref to a json document
+   as parameter.
+*/
+
+template <typename F> struct RestService {
+  const std::string operator()(std::string http_request) {
+
+    rapidjson::Document d;
+
+    if (d.Parse(http_request.data()).HasParseError()) {
+      std::cout << "Error parsing json" << std::endl;
+      // throw std::invalid_argument("json parse error");
+      return "{\"err:\" \"error parsing json\" }";
+    }
+    F()(d);
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    d.Accept(writer);
+    return buffer.GetString();
+  };
+};
 
 #endif // USERVICES_MICROSERVICE_H

@@ -9,8 +9,7 @@
 
 class Metrics : public Provider {
 public:
-    Metrics(Uservice_Interface *usvc) : Provider(usvc) {};
-
+    Metrics(std::shared_ptr<Uservice_Interface> usvc) : Provider(usvc) {};
     void Measure() {
         Provider::Measure();
         std::cout << "Metrics Here" << std::endl;
