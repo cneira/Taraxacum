@@ -6,6 +6,7 @@ set(Boost_LIBRARY_DIR /usr/lib)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
 find_package(Boost REQUIRED COMPONENTS )
 find_package(RapidJSON)
 
