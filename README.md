@@ -88,6 +88,14 @@ return 0;
 ## Microservice Routing
 There is a template where you need to have routes on your microservices
 ```cpp
+
+
+namespace uRest {
+    void biz(const Rest::Request &request, Http::ResponseWriter response) {
+        response.send(Http::Code::Ok, "Here is routing");
+    }
+}
+int main() {
 std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
       AddProviders_shared<CircuitBreaker, Logging,
                           Routing_Microservice<uRest::biz>>();
@@ -96,7 +104,8 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
   //  "/stars/response", and HTTP method : GET, POST, PUT, DELETE
 
   usvc_rest_with_routing->Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
-
+  return 0;
+}
 ```
 
 ## Current Goals
