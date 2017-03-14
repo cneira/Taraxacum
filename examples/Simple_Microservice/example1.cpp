@@ -68,11 +68,7 @@ struct Restsvc {
     s.SetInt(s.GetInt() + 1);
   }
 };
-struct svcroute {
-  void operator()(const Rest::Request &request, Http::ResponseWriter response) {
-    response.send(Http::Code::Ok, "Here is routing");
-  }
-};
+
 }
 
 namespace uRest {
@@ -82,40 +78,42 @@ void biz(const Rest::Request &request, Http::ResponseWriter response) {
 }
 
 int main() {
+/*
+   Call the providers that decorate this microservice, you could add more
+   taking a look at the Providers folder
 
-  // Call the providers that decorate this microservice, you could add more
-  // taking a look at the Providers folder
+  std::shared_ptr<Uservice_Interface> usvc =
+      AddProviders_shared<CircuitBreaker, Logging, Publisher,
+                          Microservice<microservices::RestService>>();
 
-//  std::shared_ptr<Uservice_Interface> usvc =
-//      AddProviders_shared<CircuitBreaker, Logging, Publisher,
-//                          Microservice<microservices::RestService>>();
-//
-//  usvc->Circuit_Break();
-//  usvc->Measure();
-//  // Start answering requests on port 9030 using 2 threads
-//  usvc->Answer(9030, 2);
-//
-//  // Now Using a template.
-//  //  The RestService template takes care for you json parsing validation.
-//  std::shared_ptr<Uservice_Interface> usvc_rest =
-//      AddProviders_shared<CircuitBreaker, Logging, Publisher,
-//                          Microservice<RestService<microservices::Restsvc>>>();
-//
-//  usvc_rest->Circuit_Break();
-//  usvc_rest->Measure();
-//  // Start answering requests on port 9030 using 2 threads
-//  usvc_rest->Answer(9031, 2);
+  usvc->Circuit_Break();
+  usvc->Measure();
+  // Start answering requests on port 9030 using 2 threads
+  usvc->Answer(9030, 2);
 
-  // If you need routing on your microservice, just use the
-  // Routing_Microservice template
-  // it takes as parameter a non static free function pointer with the signature
-  // void (const Rest::Request &request, Http::ResponseWriter response)
+  // Now Using a template.
+  //  The RestService template takes care for you json parsing validation.
+  std::shared_ptr<Uservice_Interface> usvc_rest =
+      AddProviders_shared<CircuitBreaker, Logging, Publisher,
+                          Microservice<RestService<microservices::Restsvc>>>();
+
+  usvc_rest->Circuit_Break();
+  usvc_rest->Measure();
+  // Start answering requests on port 9030 using 2 threads
+  usvc_rest->Answer(9031, 2);
+
+   If you need routing on your microservice, just use the
+   Routing_Microservice template
+   it takes as parameter a non static free function pointer with the signature
+   void (const Rest::Request &request, Http::ResponseWriter response)*/
 
   std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
       AddProviders_shared<CircuitBreaker, Logging, Publisher,
                           Routing_Microservice<uRest::biz>>();
+
   // Start answering requets on port 9031, using 2 threads and on the route
   //  /starts/response, and HTTP method : GET, POST, PUT, DELETE
+
   usvc_rest_with_routing->Answer(9032, 2, "/stars/response",HTTP_METHOD::GET);
 
   return 0;
