@@ -114,7 +114,9 @@ int main() {
   // Start answering requets on port 9031, using 2 threads and on the route
   //  /starts/response, and HTTP method : GET, POST, PUT, DELETE
 
-  usvc_rest_with_routing->Answer(9032, 2, "/stars/response",HTTP_METHOD::GET);
+
+  usvc_rest_with_routing->Circuit_Break();
+  //usvc_rest_with_routing->Answer(9032, 2, "/stars/response",HTTP_METHOD::GET);
 
   return 0;
 }
