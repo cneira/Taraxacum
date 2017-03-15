@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 before_install:
   - ./install_deps.sh
-script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make
+script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
 compiler:
     - clang
     - gcc
