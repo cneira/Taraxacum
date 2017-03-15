@@ -22,11 +22,11 @@
 #define USERVICES_MICROSERVICE_H
 
 #include "Uservice_Interface.h"
+#include "CircuitBreaker.h"
+#include "Logging.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
-#include <SaprolingCluster/Providers/circuitbreaker/CircuitBreaker.h>
-#include <SaprolingCluster/Providers/log/Logging.h>
 
 using namespace Net::Rest;
 template <typename F>

@@ -17,7 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <Common/Microservice.h>
+#include <Microservice.h>
 #include <iostream>
 
 // a Service is just defined as a functor holding the logic you will add to the

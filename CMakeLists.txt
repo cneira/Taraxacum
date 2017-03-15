@@ -19,24 +19,7 @@ if (LOG4CPP_FOUND)
 endif ()
 
 
-project(Uservices)
-
-set(CMAKE_CXX_STANDARD 11)
-include_directories("/usr/local/include" "/usr/include" )
-set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Common/Uservice_version.h)
-set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp)
-
-
-add_executable(Rest_example ${SOURCE_FILES})
-
-target_link_libraries(Rest_example net_static pthread)
-
-add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
-
-target_link_libraries(Rest_routing_Example net_static pthread)
-
-
-project(Uservices)
+project(Saproling-Cluster)
 include(CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -59,6 +42,17 @@ INSTALL(
 
 #install(FILES ${HEADER_FILES} DESTINATION include/Saproling)
 
+include_directories("/usr/local/include" "/usr/include" )
+set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h)
+set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp)
 
+
+add_executable(Rest_example ${SOURCE_FILES})
+
+target_link_libraries(Rest_example net_static pthread)
+
+add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
+
+target_link_libraries(Rest_routing_Example net_static pthread)
 
 
