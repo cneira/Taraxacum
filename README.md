@@ -15,7 +15,7 @@ Note that this project it is under active developing, doesn't have a stable inte
 
 # Installation
 ```bash
-git clone https://github.com/cneira/Uservices.git
+git clone https://github.com/cneira/Saproling-Cluster.git
 cd Uservices && mkdir build && cd build && cmake .. / && make && sudo make install
 ```
 

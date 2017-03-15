@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.2)
 set(CMAKE_FIND_LIBRARY_PREFIXES /usr/lib)
 set(CMAKE_FIND_LIBRARY_SUFFIXES .so)
 set(Boost_INCLUDE_DIR /usr/include)
