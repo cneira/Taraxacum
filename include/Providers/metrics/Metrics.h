@@ -5,7 +5,7 @@
 #ifndef USERVICES_METRICS_H
 #define USERVICES_METRICS_H
 
-#include "../../Common/Uservice_Interface.h"
+#include <Common/Uservice_Interface.h>
 
 class Metrics : public Provider {
 public:

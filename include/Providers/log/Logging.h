@@ -5,7 +5,7 @@
 #ifndef USERVICES_LOGGING_H
 #define USERVICES_LOGGING_H
 
-#include "../../Common/Uservice_Interface.h"
+#include <Common/Uservice_Interface.h>
 #include "log4cpp/Category.hh"
 #include "log4cpp/Appender.hh"
 #include "log4cpp/OstreamAppender.hh"

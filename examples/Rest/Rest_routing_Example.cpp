@@ -17,8 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "../../Common/Microservice.h"
-
+#include <Common/Microservice.h>
 #include <iostream>
 
 namespace uRest {
@@ -39,8 +38,9 @@ int main() {
           AddProviders_shared<CircuitBreaker, Logging,
                           Routing_Microservice<uRest::biz>>();
 
-  // Start answering requets on port 9031, using 2 threads and on the route
-    //  "/stars/response", and HTTP method : GET, POST, PUT, DELETE
+    std::cout << "Start answering requets on port 9032, using 2 threads and on "
+            "the route \"/stars/response\" using http GET"
+              << std::endl;
 
     usvc_rest_with_routing->Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
 

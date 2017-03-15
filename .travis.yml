@@ -1,7 +1,9 @@
 language: cpp
 sudo: required
 dist: trusty
-script: mkdir deps && cd deps && git clone https://github.com/oktal/pistache.git && cd pistache   && mkdir build && cd build && cmake .. && make install && cd ../../../ && mkdir build && cd build && cmake .. && make
+before_install:
+  - ./install_deps.sh
+script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make
 compiler:
     - clang
     - gcc

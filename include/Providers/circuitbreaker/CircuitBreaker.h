@@ -6,7 +6,7 @@
 #define USERVICES_CIRCUITBREAKER_H
 
 
-#include "../../Common/Uservice_Interface.h"
+#include <Common/Uservice_Interface.h>
 
 class CircuitBreaker : public Provider {
 public:

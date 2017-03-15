@@ -17,8 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "../../Common/Microservice.h"
-
+#include <Common/Microservice.h>
 #include <iostream>
 
 // a Service is just defined as a functor holding the logic you will add to the
@@ -31,11 +30,6 @@
 // '{"project":"uservices","stars": 10}' http://localhost:9029
 
 namespace microservices {
-struct Service {
-  const std::string operator()(std::string http_request) {
-    return "Hello Hello " + http_request;
-  };
-};
 
 struct RestService {
   const std::string operator()(std::string http_request) {
@@ -71,9 +65,12 @@ int main() {
   std::shared_ptr<Uservice_Interface> usvc =
           AddProviders_shared<CircuitBreaker, Logging,
                           Microservice<microservices::RestService>>();
+    std::cout << "You could test the RestService using " << std::endl
+              << "curl -i -H \"Accept: application/json\" -X POST -d\"  "
+                      "\"'{\"project\":\"uservices\",\"stars\": 10}' "
+                      "http://localhost:9029 "
+              << std::endl;
 
-  usvc->Circuit_Break();
-  usvc->Measure();
   // Start answering requests on port 9030 using 2 threads
   usvc->Answer(9030, 2);
 

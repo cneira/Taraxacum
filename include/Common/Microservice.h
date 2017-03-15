@@ -21,8 +21,8 @@
 #ifndef USERVICES_MICROSERVICE_H
 #define USERVICES_MICROSERVICE_H
 
-#include "../Providers/circuitbreaker/CircuitBreaker.h"
-#include "../Providers/log/Logging.h"
+#include <Providers/circuitbreaker/CircuitBreaker.h>
+#include <Providers/log/Logging.h>
 #include "Uservice_Interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
