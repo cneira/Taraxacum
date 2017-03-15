@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libboost-dev
+  - sudo apt-get install -y libboost-dev liblog4cpp5-dev
   - ./install_deps.sh
 script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
 compiler:
