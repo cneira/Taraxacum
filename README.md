@@ -1,4 +1,4 @@
-# Uservices
+# Saproling Cluster  
 
 [![Build Status](https://travis-ci.org/cneira/Uservices.svg?branch=master)](https://travis-ci.org/cneira/Uservices)
 

@@ -54,10 +54,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 INSTALL(
         DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-        DESTINATION include/Uservices
+        DESTINATION include/SaprolingCluster
         FILES_MATCHING PATTERN "*.h*")
 
-#install(FILES ${HEADER_FILES} DESTINATION include/Uservices)
+#install(FILES ${HEADER_FILES} DESTINATION include/Saproling)
 
 
 
