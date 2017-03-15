@@ -2,12 +2,8 @@
 set -ex
 git clone  https://github.com/miloyip/rapidjson.git
 cd rapidjson
-git submodule update --init
-mkdir build
-cd build
-cmake  ..
-make
-sudo make install
+cd include
+sudo cp -rp rapidjson  /usr/include/
 cd
 git clone https://github.com/oktal/pistache.git
 cd pistache
