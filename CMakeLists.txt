@@ -23,7 +23,7 @@ project(Uservices)
 
 set(CMAKE_CXX_STANDARD 11)
 include_directories("/usr/local/include" "/usr/include" )
-set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Common/Uservices_version.h)
+set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Common/Uservice_version.h)
 set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp)
 
 
