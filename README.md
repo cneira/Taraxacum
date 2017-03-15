@@ -13,6 +13,11 @@ Note that this project it is under active developing, doesn't have a stable inte
 * Pistache http://pistache.io/
 * RapidJson http://rapidjson.org/
 
+# Installation
+```bash
+git clone https://github.com/cneira/Uservices.git
+cd Uservices && mkdir build && cd build && cmake .. / && make && sudo make install
+```
 
 # Usage
 
