@@ -23,10 +23,10 @@
 
 #include "pistache/endpoint.h"
 #include "pistache/router.h"
+#include "Common/Uservice_version.h"
 #include <cstdint>
 #include <iostream>
 #include <string>
-#include <Common/Uservice_version.h>
 using namespace Net;
 
 enum class HTTP_METHOD : std::int8_t { GET = 1, POST = 2, PUT = 3, DELETE = 4 };
@@ -34,7 +34,6 @@ enum class HTTP_METHOD : std::int8_t { GET = 1, POST = 2, PUT = 3, DELETE = 4 };
 class Uservice_Interface {
 
 public:
-  virtual void Publish() = 0;
   virtual void Answer(int port, int threads) = 0;
   virtual void Answer(int port, int threads, const char *route,
                       HTTP_METHOD http_method) = 0;
@@ -52,17 +51,13 @@ public:
   Uservice(const int _port, const std::string _name, std::string _ver)
       : name(_name), version(_ver){};
 
-  void Publish() {
-    std::cout << "Publish Uservice " << this->name << std::endl;
-  }
   void Answer(int port, int threads) {
     std::cout << "Uservice Answering on Port " << port << std::endl;
   }
   void Answer(int port, int threads, const char *route,
               HTTP_METHOD http_method) {
-    std::cout << "Uservice Answering on Port "
-              << port
-              << "route is" << route << std::endl;
+    std::cout << "Uservice Answering on Port " << port << "route is" << route
+              << std::endl;
   }
 
   void Measure() { std::cout << " Uservice Measure" << std::endl; }
@@ -84,7 +79,7 @@ public:
 
   Provider() = default;
 
-  void Publish() { usvc->Publish(); }
+
 
   void Answer(int port, int threads) { usvc->Answer(port, threads); }
   void Answer(int port, int threads, const char *route,

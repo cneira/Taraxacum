@@ -53,23 +53,23 @@ struct RestService {
     // Output {"project":"rapidjson","stars":11}
     std::cout << buffer.GetString() << std::endl;
     return buffer.GetString();
-  };
+  }
 };
 }
 
 int main() {
 
-    //   Call the providers that decorate this microservice, you could add more
-    //   taking a look at the Providers folder
+  //   Call the providers that decorate this microservice, you could add more
+  //   taking a look at the Providers folder
 
   std::shared_ptr<Uservice_Interface> usvc =
-          AddProviders_shared<CircuitBreaker, Logging,
+      AddProviders_shared<CircuitBreaker, Logging,
                           Microservice<microservices::RestService>>();
-    std::cout << "You could test the RestService using " << std::endl
-              << "curl -i -H \"Accept: application/json\" -X POST -d\"  "
-                      "\"'{\"project\":\"uservices\",\"stars\": 10}' "
-                      "http://localhost:9029 "
-              << std::endl;
+  std::cout << "You could test the RestService using " << std::endl
+            << "curl -i -H \"Accept: application/json\" -X POST -d\"  "
+               "\"'{\"project\":\"uservices\",\"stars\": 10}' "
+               "http://localhost:9029 "
+            << std::endl;
 
   // Start answering requests on port 9030 using 2 threads
   usvc->Answer(9030, 2);

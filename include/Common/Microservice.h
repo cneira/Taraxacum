@@ -21,18 +21,19 @@
 #ifndef USERVICES_MICROSERVICE_H
 #define USERVICES_MICROSERVICE_H
 
-#include <Providers/circuitbreaker/CircuitBreaker.h>
-#include <Providers/log/Logging.h>
 #include "Uservice_Interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
+#include "Providers/circuitbreaker/CircuitBreaker.h"
+#include "Providers/log/Logging.h"
 
 using namespace Net::Rest;
 template <typename F>
 class Microservice : public Uservice, public Http::Handler {
 private:
   std::string microservice_response;
+
 
   void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
     microservice_response = F()(Request.body());
@@ -96,7 +97,6 @@ public:
       case HTTP_METHOD::DELETE:
         Routes::Delete(router, route, Routes::bind(F));
         break;
-
       }
       httpEndpoint->setHandler(router.handler());
       std::cout << "Start serving" << std::endl;
@@ -117,15 +117,14 @@ public:
  AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
 */
 
-
 //
 template <typename T> std::shared_ptr<T> AddProviders_shared() {
-  return std::shared_ptr<T>(new T);
+  return std::make_shared<T>();
 }
 
 template <typename T, typename Arg1, typename... Args>
 std::shared_ptr<T> AddProviders_shared() {
-  return std::shared_ptr<T>(new T(AddProviders_shared<Arg1, Args...>()));
+  return std::make_shared<T>(T(AddProviders_shared<Arg1, Args...>()));
 }
 /*
    Template for microservices, in this case this service will handle json
