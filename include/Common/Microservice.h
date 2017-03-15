@@ -25,8 +25,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
-#include "Providers/circuitbreaker/CircuitBreaker.h"
-#include "Providers/log/Logging.h"
+#include <SaprolingCluster/Providers/circuitbreaker/CircuitBreaker.h>
+#include <SaprolingCluster/Providers/log/Logging.h>
 
 using namespace Net::Rest;
 template <typename F>
