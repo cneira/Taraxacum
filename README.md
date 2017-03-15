@@ -24,7 +24,7 @@ cd  Saproling-Cluster && mkdir build && cd build && cmake ../ && make && sudo ma
 
 # Usage
 
-Uservices follow the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
+Saproling Cluster follows the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
 Decorators in Saproling Cluster are called Providers
 
 ## Instanciating a microservice
