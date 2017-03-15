@@ -6,12 +6,15 @@ Is a framework for creating microservices written in pure C++-11.
 It aims to be a fast, full featured and with an easy to use API implementation for microservices.
 It's sort of inspired on [Go-Kit](https://gokit.io/) for microservices. It uses the excellent frameworks pistache for REST and HTTP and rapidjson. 
 
+
 Note that this project it is under active developing, doesn't have a stable interface and was not tested enough. So if you are looking for something stable and ready to be used in production then it's better to come back later or help me growing this project to the quality level you need.
 
 # Dependencies
 
 * Pistache http://pistache.io/
+
 * RapidJson http://rapidjson.org/
+
 
 # Installation
 ```bash
@@ -113,9 +116,15 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
 }
 ```
 
-## Current Goals
+## TODO
 
-  * Implement the Circuit Breaker, Logging, Observability and Load Balancer providers.
-  * Code Refactoring
-  * Stabilize API
+  - [ ]  Check current design and refactor 
+  - [X]  Define which providers are not needed 
+  - [ ]  Stabilize API
+  - [X]  Stablish scope of Saproling Cluster
+  - [ ]  Stress test microservices
+  - [ ]  Async examples
+  - [ ]  Add React
+  - [ ]  Implement API gateway pattern
+  - [ ]  Add Observability to microservices
  
