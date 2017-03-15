@@ -19,13 +19,13 @@ Note that this project it is under active developing, doesn't have a stable inte
 # Installation
 ```bash
 git clone  https://github.com/cneira/Saproling-Cluster.git
-cd Uservices && mkdir build && cd build && cmake .. / && make && sudo make install
+cd  Saproling-Cluster && mkdir build && cd build && cmake ../ && make && sudo make install
 ```
 
 # Usage
 
 Uservices follow the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
-Decorators in Uservices are called Providers
+Decorators in Saproling Cluster are called Providers
 
 ## Instanciating a microservice
  To instanciate a microservice we use the template AddProviders_shared template.
@@ -121,7 +121,6 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
   - [ ]  Check current design and refactor 
   - [X]  Define which providers are not needed 
   - [ ]  Stabilize API
-  - [X]  Stablish scope of Saproling Cluster
   - [ ]  Stress test microservices
   - [ ]  Async examples
   - [ ]  Add React
