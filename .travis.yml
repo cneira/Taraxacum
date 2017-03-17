@@ -1,14 +1,18 @@
 language: cpp
-sudo: required
-dist: trusty
-
-compiler:
-    - clang
-    - gcc
-branches:
-    only:
-        - master
-
+ sudo: required
+ dist: trusty
+ before_install:
+ - sudo apt-get -qq update
+ - sudo apt-get install -y libboost-dev liblog4cpp5-dev
+ - ./install_deps.sh
+ script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
+ compiler:
+  - clang
+  - gcc
+ branches:
+  only:
+ - master
+  
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
