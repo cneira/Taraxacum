@@ -25,7 +25,7 @@ cd  Saproling-Cluster && mkdir build && cd build && cmake ../ && make && sudo ma
 # Usage
 
 Taraxacum follows the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
-Decorators in Saproling Cluster are called Providers
+In Taraxacum Decorators are just called Providers to reflect for example that we could add a graphite provider to include metrics.
 
 ## Instanciating a microservice
  To instanciate a microservice we use the template AddProviders_shared template.
