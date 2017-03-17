@@ -1,4 +1,4 @@
-# Saproling Cluster
+# Taraxacum
      
   [![Build Status](https://travis-ci.org/cneira/Saproling-Cluster.svg?branch=master)](https://travis-ci.org/cneira/Saproling-Cluster)   
      
@@ -24,7 +24,7 @@ cd  Saproling-Cluster && mkdir build && cd build && cmake ../ && make && sudo ma
 
 # Usage
 
-Saproling Cluster follows the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
+Taraxacum follows the [Decorator Patern](https://en.wikipedia.org/wiki/Decorator_pattern).
 Decorators in Saproling Cluster are called Providers
 
 ## Instanciating a microservice
