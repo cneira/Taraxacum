@@ -21,19 +21,19 @@
 #ifndef USERVICES_MICROSERVICE_H
 #define USERVICES_MICROSERVICE_H
 
-#include "Uservice_Interface.h"
 #include "CircuitBreaker.h"
 #include "Logging.h"
+#include "Uservice_Interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/error/en.h"
 
 using namespace Net::Rest;
 template <typename F>
 class Microservice : public Uservice, public Http::Handler {
 private:
   std::string microservice_response;
-
 
   void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
     microservice_response = F()(Request.body());
@@ -137,12 +137,14 @@ template <typename F> struct RestService {
   const std::string operator()(std::string http_request) {
 
     rapidjson::Document d;
-
     if (d.Parse(http_request.data()).HasParseError()) {
-      std::cout << "Error parsing json" << std::endl;
-      // throw std::invalid_argument("json parse error");
-      return "{\"err:\" \"error parsing json\" }";
+      std::stringstream ss;
+      ss << "{\"errcode:\"" << (unsigned)d.GetErrorOffset()
+         << ", \"errmsg\":" << rapidjson::GetParseError_En(d.GetParseError())
+         << "}";
+      return ss.str();
     }
+
     F()(d);
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);

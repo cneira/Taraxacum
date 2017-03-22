@@ -1,0 +1,46 @@
+  {
+    "_id": "58cfc8ac0ab9022d021c5ef5",
+    "index": 0,
+    "guid": "34a6718e-6883-449c-a698-40cef745a0f8",
+    "isActive": false,
+    "balance": "$3,043.86",
+    "picture": "http://placehold.it/32x32",
+    "age": 24,
+    "eyeColor": "green",
+    "name": "Jeanette Austin",
+    "gender": "female",
+    "company": "ZIDANT",
+    "email": "jeanetteaustin@zidant.com",
+    "phone": "+1 (899) 574-3722",
+    "address": "748 Cook Street, Woodruff, Iowa, 9108",
+    "about": "Quis sit aliqua non ex excepteur. Anim voluptate officia reprehenderit veniam consequat enim dolor et enim dolor ut laboris proident ullamco. Aute mollit sint non adipisicing ea aliquip proident labore exercitation eiusmod ut anim deserunt qui.\r\n",
+    "registered": "2015-09-07T09:20:33 +03:00",
+    "latitude": 38.558791,
+    "longitude": -50.395326,
+    "tags": [
+      "in",
+      "elit",
+      "voluptate",
+      "sunt",
+      "voluptate",
+      "non",
+      "est"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Boyd Figueroa"
+      },
+      {
+        "id": 1,
+        "name": "Anastasia Vargas"
+      },
+      {
+        "id": 2,
+        "name": "Brianna William"
+      }
+    ],
+    "greeting": "Hello, Jeanette Austin! You have 5 unread messages.",
+    "favoriteFruit": "apple"
+  }
+  

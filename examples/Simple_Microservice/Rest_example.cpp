@@ -29,21 +29,24 @@
 // curl -i -H "Accept: application/json" -X POST -d
 // '{"project":"uservices","stars": 10}' http://localhost:9029
 
+
 namespace microservices {
 
 struct RestService {
   const std::string operator()(std::string http_request) {
 
     rapidjson::Document d;
-
     if (d.Parse(http_request.data()).HasParseError()) {
-      std::cout << "Error parsing json" << std::endl;
-      // throw std::invalid_argument("json parse error");
-      return "{\"err:\" \"error parsing json\" }";
+
+      std::stringstream ss;
+      ss << "{\"errcode:\"" << (unsigned)d.GetErrorOffset()
+         << ", \"errmsg\":" << rapidjson::GetParseError_En(d.GetParseError())
+         << "}";
+      return ss.str();
     }
 
     // 2. Modify it by DOM.
-    rapidjson::Value &s = d["stars"];
+    rapidjson::Value &s = d["age"];
     s.SetInt(s.GetInt() + 1);
 
     // 3. Stringify the DOM
@@ -56,6 +59,7 @@ struct RestService {
   }
 };
 }
+
 
 int main() {
 
@@ -72,7 +76,7 @@ int main() {
             << std::endl;
 
   // Start answering requests on port 9030 using 2 threads
-  usvc->Answer(9030, 2);
+  usvc->Answer(9029, 2);
 
   return 0;
 }
