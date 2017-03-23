@@ -2,7 +2,6 @@ language: cpp
 sudo: required
 dist: trusty
 compiler:
-    - clang-3.7
     - gcc-5.4.0
 env:
   global:
