@@ -2,7 +2,7 @@
 
 # Taraxacum
      
-  [![Build Status](https://travis-ci.org/cneira/Saproling-Cluster.svg?branch=master)](https://travis-ci.org/cneira/Saproling-Cluster)   
+  [![Build Status](https://travis-ci.org/cneira/Taraxacum.svg?branch=master)](https://travis-ci.org/cneira/Taraxacum)   
      
 Is a framework for creating microservices written in pure C++-11.
 It aims to be a fast, full featured and with an easy to use API implementation for microservices.
