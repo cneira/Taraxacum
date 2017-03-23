@@ -1,25 +1,18 @@
 language: cpp
 sudo: required
 dist: trusty
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libboost-dev liblog4cpp5-dev
-  - ./install_deps.sh
-script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
 compiler:
-    - clang
-    - gcc
-
-branches:
-    only:
-- master
-
+    - gcc-5.4.0
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "mdowyscZ5s+tv3VxgLftK1HuJ6RTiHyYQcllXR5zxmCMd7EzIlLO5WEf8JoKdSLStg+HmKudIgpolUwWIbWpPnaBLXJaxTed36zAyI2RUxYqJWrAKX3YSNRCTUJSB+xHOWrEpTlh2fQ1JwmRooPLgtNN8TrLvB7GA8H0frazWhGcTOmf7AZ9cemQ5oW0+P3LoNf1eCX7K8dC2F3AkmlAT1f/xgScbhWukt2SYpxC9SjJnm+G0EvgM98A9LUnQpFCry7NtjqkcXPqKDiiO3ZUHlWAuRkhpVIL57xFFI1lhT2MzrvCaZgYxu/6PmVc655dU/0jFCUVxRhhGQ4FoyOpCO3BWMC2NPJMwNw+CaRQlB28FQYMwJHv8XFaz32L9We9XvyvpHpgRbum1MbBLN8ptHIznwNek6efGSwaxL7k7dFT1k5JpoOCdc069lifbl2PGsQA8s2/wlp4aV1xB5tYMfad0go9Oln90FJGI4PyL0MpXFHzbzop0wFjTA7xYRR9DuzsTqxtV+Bc6qjv9REt80eBwkm6eqLoFqfDebQuCbeYk1fzpUUW15FssrvZtfPAlDpbVGWdiYoq9ZrY7Rh75L3N3sm4YagQjXNI0VQyfNQ0oiGDvkyd9ZvunX8/VaS8yaSs6a0ZAdjaNTDgfxQCIVLg5YrWQPKCkb0C/KIZpG8="
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libboost-dev liblog4cpp5-dev
+  - ./install_deps.sh
 
 addons:
   coverity_scan:
