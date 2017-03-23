@@ -12,7 +12,7 @@ before_install:
 
 addons:
   coverity_scan:
-    project:
+    project: "Taraxacum"
       name: "cneira/Taraxacum"
       description: "Build submitted via Travis CI"
     notification_email: cneirabustos@gmail.com
