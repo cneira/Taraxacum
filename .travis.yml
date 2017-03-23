@@ -1,3 +1,8 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "jP2uC/Ny0Wa/Q2d7R+wMhW+DoBBREMxHGNOmTPgK27hrNhNWGTrnXljWEiu008xqy5smi/tReUTBGvuF0+Ie4324gZnBZ4Pa0fmw0wSQK69l7O6NTjL09tr/sQX5sR5+r96I3oRlFTkiyVSoZbvqbVQow6A+A1eiSbgODnLh6/k5Hxh6505zNPCQG3fTDbfNWjurtFs0aH5TNe+TtE5luephEvlS1O5ZBIud9ZXiYRlmZ/8DAc4bAebh8+nqgWyC/S0grmLmcUURxqcRaU5sItHjlR6rPkFT6/l0Kk7lXqPkCiSi9gE3Ir+cOqUChZXQbBUIIQK2hqMYuZhlLdoh5X4qgZhkCxPGPm34Vhnv1UDJSz2+/qEgp5aJK+1rC1D9+ukueNYsFmYfb+YAvtMfU20vQzIC2ekJI2oNq0ac6865eEie6WeeXr6hkRTKthYmjoq4ExEoVx/zw77UGE3vWSjfYwXw5HeCcB8L+xSye2mq9h2EnW0RA2uVFGAKmhTDrvKj5egUCQgj6Zm0VOr3QS0/Jnb1IVwf0/j8IGQ5iPoidhm1ZdNSodz9O4GaUkn0Shi26kkKUivi+JG+PKoDO+usv1OX1CYdynyK6Vdy/0sUOpihPteiellt4gxz3xeT8SYWN0dVs+eGghPpXtDhjw9JA4j2xrcLem0J2KmmuXY="
 language: cpp
 sudo: required
 dist: trusty
@@ -5,24 +10,20 @@ compiler:
 - clang
 - gcc
 
-env:
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "jP2uC/Ny0Wa/Q2d7R+wMhW+DoBBREMxHGNOmTPgK27hrNhNWGTrnXljWEiu008xqy5smi/tReUTBGvuF0+Ie4324gZnBZ4Pa0fmw0wSQK69l7O6NTjL09tr/sQX5sR5+r96I3oRlFTkiyVSoZbvqbVQow6A+A1eiSbgODnLh6/k5Hxh6505zNPCQG3fTDbfNWjurtFs0aH5TNe+TtE5luephEvlS1O5ZBIud9ZXiYRlmZ/8DAc4bAebh8+nqgWyC/S0grmLmcUURxqcRaU5sItHjlR6rPkFT6/l0Kk7lXqPkCiSi9gE3Ir+cOqUChZXQbBUIIQK2hqMYuZhlLdoh5X4qgZhkCxPGPm34Vhnv1UDJSz2+/qEgp5aJK+1rC1D9+ukueNYsFmYfb+YAvtMfU20vQzIC2ekJI2oNq0ac6865eEie6WeeXr6hkRTKthYmjoq4ExEoVx/zw77UGE3vWSjfYwXw5HeCcB8L+xSye2mq9h2EnW0RA2uVFGAKmhTDrvKj5egUCQgj6Zm0VOr3QS0/Jnb1IVwf0/j8IGQ5iPoidhm1ZdNSodz9O4GaUkn0Shi26kkKUivi+JG+PKoDO+usv1OX1CYdynyK6Vdy/0sUOpihPteiellt4gxz3xeT8SYWN0dVs+eGghPpXtDhjw9JA4j2xrcLem0J2KmmuXY="
-
 before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
       - sudo apt-get -qq update
       - sudo apt-get install -y libboost-dev liblog4cpp5-dev
       - ./install_deps.sh
- 
+
 addons:
   coverity_scan:
     project:
       name: "cneira/Taraxacum"
       description: "Taraxacum is a C++-11 Microservices Framework with focus in an easy to use API"
     notification_email: cneirabustos@gmail.com
-    build_command_prepend: "mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .."
-    build_command: "make -j2"
+    build_command_prepend: ""
+    build_command: "mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make"
     branch_pattern: master
+
+
