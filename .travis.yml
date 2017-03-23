@@ -4,32 +4,18 @@ env:
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "mdowyscZ5s+tv3VxgLftK1HuJ6RTiHyYQcllXR5zxmCMd7EzIlLO5WEf8JoKdSLStg+HmKudIgpolUwWIbWpPnaBLXJaxTed36zAyI2RUxYqJWrAKX3YSNRCTUJSB+xHOWrEpTlh2fQ1JwmRooPLgtNN8TrLvB7GA8H0frazWhGcTOmf7AZ9cemQ5oW0+P3LoNf1eCX7K8dC2F3AkmlAT1f/xgScbhWukt2SYpxC9SjJnm+G0EvgM98A9LUnQpFCry7NtjqkcXPqKDiiO3ZUHlWAuRkhpVIL57xFFI1lhT2MzrvCaZgYxu/6PmVc655dU/0jFCUVxRhhGQ4FoyOpCO3BWMC2NPJMwNw+CaRQlB28FQYMwJHv8XFaz32L9We9XvyvpHpgRbum1MbBLN8ptHIznwNek6efGSwaxL7k7dFT1k5JpoOCdc069lifbl2PGsQA8s2/wlp4aV1xB5tYMfad0go9Oln90FJGI4PyL0MpXFHzbzop0wFjTA7xYRR9DuzsTqxtV+Bc6qjv9REt80eBwkm6eqLoFqfDebQuCbeYk1fzpUUW15FssrvZtfPAlDpbVGWdiYoq9ZrY7Rh75L3N3sm4YagQjXNI0VQyfNQ0oiGDvkyd9ZvunX8/VaS8yaSs6a0ZAdjaNTDgfxQCIVLg5YrWQPKCkb0C/KIZpG8="
 
-language: cpp
-
-sudo: required
-dist: trusty
-
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libboost-dev liblog4cpp5-dev
-- ./install_deps.sh
-
-compiler:
-  - clang
-  - gcc
+  - ./install_deps.sh
 
 addons:
-  apt:
-    packages:
-    - libboost-dev
-
   coverity_scan:
     project:
-      name: "Taraxacum"
+      name: "cneira/Taraxacum"
       description: "Build submitted via Travis CI"
     notification_email: cneirabustos@gmail.com
-    build_command_prepend: ""
+    build_command_prepend: "mkdir build && cd build && cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Release .. "
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
 
-script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
