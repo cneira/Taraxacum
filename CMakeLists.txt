@@ -19,7 +19,7 @@ if (LOG4CPP_FOUND)
 endif ()
 
 
-project(Saproling-Cluster)
+project(Taraxacum)
 include(CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -37,7 +37,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 INSTALL(
         DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-        DESTINATION include/SaprolingCluster
+        DESTINATION include/Taraxacum
         FILES_MATCHING PATTERN "*.h*")
 
 #install(FILES ${HEADER_FILES} DESTINATION include/Saproling)

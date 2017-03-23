@@ -36,6 +36,7 @@ struct RestService {
   const std::string operator()(std::string http_request) {
 
     rapidjson::Document d;
+
     if (d.Parse(http_request.data()).HasParseError()) {
 
       std::stringstream ss;
@@ -79,4 +80,5 @@ int main() {
   usvc->Answer(9029, 2);
 
   return 0;
+
 }
