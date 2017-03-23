@@ -23,8 +23,8 @@ addons:
       name: "cneira/Taraxacum"
       description: "Build submitted via Travis CI"
     notification_email: cneirabustos@gmail.org
-    build_command_prepend: "./autogen.sh && ./configure && make clean"
-    build_command:   "make -j 4"
+    build_command_prepend: "./install_deps.sh"
+    build_command:   "mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make"
     branch_pattern: coverity_scan
 
 script: ./install_deps.sh
