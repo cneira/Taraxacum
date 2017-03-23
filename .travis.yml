@@ -1,7 +1,9 @@
 language: cpp
 sudo: required
 dist: trusty
-
+compiler:
+    - clang-3.7
+    - gcc-5.4.0
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
