@@ -28,6 +28,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/error/en.h"
+#include "pstream.h"
 
 using namespace Net::Rest;
 template <typename F>
@@ -152,5 +153,6 @@ template <typename F> struct RestService {
     return buffer.GetString();
   };
 };
+
 
 #endif // USERVICES_MICROSERVICE_H
