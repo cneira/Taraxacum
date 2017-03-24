@@ -21,28 +21,27 @@
 #include <iostream>
 
 namespace uRest {
-    void biz(const Rest::Request &request, Http::ResponseWriter response) {
-        response.send(Http::Code::Ok, "Here is routing");
-    }
+void biz(const Rest::Request &request, Http::ResponseWriter response) {
+  response.send(Http::Code::Ok, "Here is routing");
+}
 }
 
 int main() {
-
-    //   If you need routing on your microservice, just use the
-    //   Routing_Microservice template
-    //   it takes as parameter a non static free function pointer with the
-    //   signature
-    //   void (const Rest::Request &request, Http::ResponseWriter response)
-    //
+  using namespace Taraxacum;
+  //   If you need routing on your microservice, just use the
+  //   Routing_Microservice template
+  //   it takes as parameter a non static free function pointer with the
+  //   signature
+  //   void (const Rest::Request &request, Http::ResponseWriter response)
+  //
   std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
-          AddProviders_shared<CircuitBreaker, Logging,
-                          Routing_Microservice<uRest::biz>>();
+      AddProviders_shared<Routing_Microservice<uRest::biz>>();
 
-    std::cout << "Start answering requets on port 9032, using 2 threads and on "
-            "the route \"/stars/response\" using http GET"
-              << std::endl;
+  std::cout << "Start answering requets on port 9032, using 2 threads and on "
+               "the route \"/stars/response\" using http GET"
+            << std::endl;
 
-    usvc_rest_with_routing->Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
+  usvc_rest_with_routing->Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
 
   return 0;
 }

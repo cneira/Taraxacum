@@ -13,15 +13,15 @@ Note that this project it is under active developing, doesn't have a stable inte
 
 # Dependencies
 
-* Pistache http://pistache.io/
+* Pistache  http://pistache.io/
 
 * RapidJson http://rapidjson.org/
 
 
 # Installation
 ```bash
-git clone  https://github.com/cneira/Saproling-Cluster.git
-cd  Saproling-Cluster && mkdir build && cd build && cmake ../ && make && sudo make install
+git clone  https://github.com/cneira/Taraxacum.git
+cd  Taraxacum && mkdir build && cd build && cmake ../ && make && sudo make install
 ```
 
 # Usage
@@ -51,33 +51,32 @@ In Taraxacum Decorators are just called Providers to reflect for example that we
 
 # Examples
 
-## Simple microservice
+## Simple micro service
 This microservice just returns the string "Hello Hello" and the  http request received 
 ```cpp
-#include "SaprolingCluster/Microservice.h"
+#include "Taraxacum/Microservice.h"
 
-namespace microservices {
 struct Service {
   const std::string operator()(std::string http_request) {
     return "Hello Hello " + http_request;
   };
-};
+
 
 int main() {
    std::shared_ptr<Uservice_Interface> usvc =
         AddProviders_shared<CircuitBreaker, Logging,
-                            Microservice<microservices::Service>>();
+                            Microservice<Service>>();
     // Start answering requests on port 9030 using 2 threads
     usvc->Answer(9030, 2);
 }
 ```
 
-## Rest Microservice
+## Rest Micro service
 If you need to consume and output json,rapidjson is used, there is Rest microservice template.
 
 ```cpp 
 // The same but using the RestService template
-namespace microservices {
+
 struct Restsvc {
   void operator()(rapidjson::Document &Doc) {
     rapidjson::Value &s = Doc["stars"];
@@ -85,17 +84,17 @@ struct Restsvc {
   }
 };
 
-}
+
 int main() {
   // Now Using a template.
   //  The RestService template takes care for you json parsing validation.
   std::shared_ptr<Uservice_Interface> usvc_rest =
       AddProviders_shared<CircuitBreaker, Logging,
-                          Microservice<RestService<microservices::Restsvc>>>();
+                          Microservice<RestService<Restsvc>>>();
 return 0;                          
 }
 ```
-## Microservice Routing
+## Micro service Routing
 There is a template where you need to have routes on your microservices
 ```cpp
 
@@ -117,6 +116,26 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
   return 0;
 }
 ```
+## Shell command micro service
+ This will create a micro service that expects a config.json with the following format { "cmd": \<your shell command> }
+ and will respond a json with the format {"output_cmd": "\<shell command output>" ,"err": "\<error message if any>" }
+```cpp
+ using namespace Taraxacum;
+  std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
+      AddProviders_shared<Routing_Microservice<uServices::ShellCmd>>();
+
+  std::cout
+      << "Start answering requets on port 9032, using 2 threads and on "
+         "the route \"/services/script1\" using http GET, this will "
+         "execute the command specified in config.json and return the result"
+      << std::endl;
+
+  usvc_rest_with_routing->Answer(9032, 2, "/services/script1",
+                                 HTTP_METHOD::GET);
+
+```
+
+
 
 ## TODO
 
@@ -124,8 +143,7 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
   - [X]  Define which providers are not needed 
   - [ ]  Stabilize API
   - [ ]  Stress test microservices
-  - [ ]  Async examples
-  - [ ]  Add React
   - [ ]  Implement API gateway pattern
-  - [ ]  Add Observability to microservices
+  - [ ]  Add Observability to micro services
+  - [ ]  Create more examples
  

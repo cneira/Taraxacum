@@ -40,11 +40,11 @@ INSTALL(
         DESTINATION include/Taraxacum
         FILES_MATCHING PATTERN "*.h*")
 
-#install(FILES ${HEADER_FILES} DESTINATION include/Saproling)
 
 include_directories("/usr/local/include" "/usr/include" )
 set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h)
-set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp)
+set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp )
+set(SOURCE_FILES_SHELL_MICROSERVICE  examples/Rest/Script_Microservice.cpp)
 
 
 add_executable(Rest_example ${SOURCE_FILES})
@@ -55,4 +55,7 @@ add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
 
 target_link_libraries(Rest_routing_Example net_static pthread)
 
+add_executable(Script_Microservice ${SOURCE_FILES_SHELL_MICROSERVICE})
+
+target_link_libraries(Script_Microservice net_static pthread)
 

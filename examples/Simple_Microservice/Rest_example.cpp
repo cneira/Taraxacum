@@ -29,10 +29,7 @@
 // curl -i -H "Accept: application/json" -X POST -d
 // '{"project":"uservices","stars": 10}' http://localhost:9029
 
-
-namespace microservices {
-
-struct RestService {
+struct speakjson {
   const std::string operator()(std::string http_request) {
 
     rapidjson::Document d;
@@ -59,17 +56,14 @@ struct RestService {
     return buffer.GetString();
   }
 };
-}
-
 
 int main() {
-
+  using namespace Taraxacum;
   //   Call the providers that decorate this microservice, you could add more
   //   taking a look at the Providers folder
 
   std::shared_ptr<Uservice_Interface> usvc =
-      AddProviders_shared<CircuitBreaker, Logging,
-                          Microservice<microservices::RestService>>();
+      AddProviders_shared<Microservice<speakjson>>();
   std::cout << "You could test the RestService using " << std::endl
             << "curl -i -H \"Accept: application/json\" -X POST -d\"  "
                "\"'{\"project\":\"uservices\",\"stars\": 10}' "
@@ -80,5 +74,4 @@ int main() {
   usvc->Answer(9029, 2);
 
   return 0;
-
 }
