@@ -38,6 +38,7 @@ In Taraxacum Decorators are just called Providers to reflect for example that we
  ```
 ## Add Providers
 ```cpp
+using namespace Taraxacum;
  // Here we are adding a CircuitBreaker and a Logging Providers
     std::shared_ptr<Uservice_Interface> usvc =
          AddProviders_shared<CircuitBreaker, Logging,
@@ -55,7 +56,7 @@ In Taraxacum Decorators are just called Providers to reflect for example that we
 This microservice just returns the string "Hello Hello" and the  http request received 
 ```cpp
 #include "Taraxacum/Microservice.h"
-
+using namespace Taraxacum;
 struct Service {
   const std::string operator()(std::string http_request) {
     return "Hello Hello " + http_request;
@@ -75,6 +76,7 @@ int main() {
 If you need to consume and output json,rapidjson is used, there is Rest microservice template.
 
 ```cpp 
+using namespace Taraxacum;
 // The same but using the RestService template
 
 struct Restsvc {
@@ -98,7 +100,7 @@ return 0;
 There is a template where you need to have routes on your microservices
 ```cpp
 
-
+using namespace Taraxacum;
 namespace uRest {
     void biz(const Rest::Request &request, Http::ResponseWriter response) {
         response.send(Http::Code::Ok, "Here is routing");
@@ -196,7 +198,8 @@ Percentage of the requests served within a certain time (ms)
 
   - [ ]  Check current design and refactor 
   - [X]  Define which providers are not needed 
-  - [ ]  Stabilize API
+  - [ ]  Remove/Add Providers 
+  - [X]  Stabilize API
   - [ ]  Stress test microservices
   - [ ]  Implement API gateway pattern
   - [ ]  Add Observability to micro services
