@@ -24,4 +24,4 @@ addons:
     build_command:   ""
     branch_pattern: coverity_scan
 
-script: script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
+script: mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make
