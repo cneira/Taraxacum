@@ -135,6 +135,61 @@ std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
 
 ```
 
+## Performance tests
+
+For the Shellcmd micro services the results are the following
+
+using apache benchmark tool with the following parameters:
+```bash
+
+$  ab -n 2000  -k -v 4 -c 200   http://127.0.0.1:9032/services/script1
+{ "cmd":" Linux 6fd4b134-4c25-cbab-9982-c292a79c2f04 4.3.0 BrandZ virtual linux x86_64 x86_64 x86_64 GNU/Linux", "err":""}
+LOG: Response code = 200
+
+
+Completed 2000 requests
+Finished 2000 requests
+
+
+Server Software:
+Server Hostname:        127.0.0.1
+Server Port:            9032
+
+Document Path:          /services/script1
+Document Length:        122 bytes
+
+Concurrency Level:      200
+Time taken for tests:   9.527 seconds
+Complete requests:      2000
+Failed requests:        0
+Keep-Alive requests:    2000
+Total transferred:      372000 bytes
+HTML transferred:       244000 bytes
+Requests per second:    209.92 [#/sec] (mean)
+Time per request:       952.726 [ms] (mean)
+Time per request:       4.764 [ms] (mean, across all concurrent requests)
+Transfer rate:          38.13 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.9      0       6
+Processing:     8  892 224.5    907    1198
+Waiting:        8  892 224.5    907    1198
+Total:          8  892 223.9    907    1198
+
+Percentage of the requests served within a certain time (ms)
+  50%    907
+  66%   1004
+  75%   1045
+  80%   1065
+  90%   1148
+  95%   1170
+  98%   1191
+  99%   1195
+ 100%   1198 (longest request)
+
+```
+
 
 
 ## TODO
