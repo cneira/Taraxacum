@@ -69,9 +69,9 @@ int main() {
                "\"'{\"project\":\"uservices\",\"stars\": 10}' "
                "http://localhost:9029 "
             << std::endl;
-
   // Start answering requests on port 9030 using 2 threads
   usvc->Answer(9029, 2);
+
 
   return 0;
 }
