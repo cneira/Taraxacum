@@ -19,29 +19,46 @@
 
 #include <Microservice.h>
 #include <iostream>
+#include <InfluxDB.h>
+#include "InfluxDB.h"
 
 namespace uRest {
-void biz(const Rest::Request &request, Http::ResponseWriter response) {
-  response.send(Http::Code::Ok, "Here is routing");
-}
+    InfluxDB inflx;
+    std::string data;
+
+    void biz(const Rest::Request &request, Http::ResponseWriter response) {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        response.send(Http::Code::Ok, "Here is routing");
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        double response_time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0;
+        data = "response_time,host=server02 value=" + std::to_string(response_time);
+        inflx.Write(data);
+        inflx.Query("select * ");
+    };
+
+    struct aux {
+        const void operator()(const Rest::Request &request, Http::ResponseWriter response) {
+            response.send(Http::Code::Ok, "Here is routing functor");
+        }
+    };
 }
 
 int main() {
-  using namespace Taraxacum;
-  //   If you need routing on your microservice, just use the
-  //   Routing_Microservice template
-  //   it takes as parameter a non static free function pointer with the
-  //   signature
-  //   void (const Rest::Request &request, Http::ResponseWriter response)
-  //
-  std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
-      AddProviders_shared<Routing_Microservice<uRest::biz>>();
+    using namespace Taraxacum;
+    //   If you need routing on your microservice, just use the
+    //   Routing_Microservice template
+    //   it takes as parameter a non static free function pointer with the
+    //   signature
+    //   void (const Rest::Request &request, Http::ResponseWriter response)
+    //
 
-  std::cout << "Start answering requets on port 9032, using 2 threads and on "
-               "the route \"/stars/response\" using http GET"
-            << std::endl;
+    auto usvc = Routing_Microservice<uRest::biz>();
 
-  usvc_rest_with_routing->Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
+    std::cout << "Start answering requets on port 9032, using 2 threads and on "
+            "the route \"/stars/response\" using http GET"
+              << std::endl;
 
-  return 0;
+    usvc.Answer(9032, 2, "/stars/response", HTTP_METHOD::GET);
+
+    return 0;
 }

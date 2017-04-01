@@ -19,30 +19,30 @@
 
 #include <Microservice.h>
 #include <iostream>
+#include <InfluxDB.h>
 
 int main() {
 
-  //   If you need routing on your microservice, just use the
-  //   Routing_Microservice template
-  //   it takes as parameter a non static free function pointer with the
-  //   signature
-  //   void (const Rest::Request &request, Http::ResponseWriter response)
-  //   RestShellscript will execute a command defined in a config.json file in
-  //   the path of the microservice
-  //    config.json should have at least the cmd key : { "cmd": "your shell
-  //    command" }
-  using namespace Taraxacum;
-  std::shared_ptr<Uservice_Interface> usvc_rest_with_routing =
-      AddProviders_shared<Routing_Microservice<uServices::ShellCmd>>();
+    //   If you need routing on your microservice, just use the
+    //   Routing_Microservice template
+    //   it takes as parameter a non static free function pointer with the
+    //   signature
+    //   void (const Rest::Request &request, Http::ResponseWriter response)
+    //   RestShellscript will execute a command defined in a config.json file in
+    //   the path of the microservice
+    //    config.json should have at least the cmd key : { "cmd": "your shell
+    //    command" }
+    using namespace Taraxacum;
 
-  std::cout
-      << "Start answering requets on port 9032, using 2 threads and on "
-         "the route \"/services/script1\" using http GET, this will "
-         "execute the command specified in config.json and return the result"
-      << std::endl;
+    auto usvc = Routing_Microservice<Routing::ShellCmd>();
+    std::cout
+            << "Start answering requets on port 9032, using 2 threads and on "
+                    "the route \"/services/script1\" using http GET, this will "
+                    "execute the command specified in config.json and return the result"
+            << std::endl;
 
-  usvc_rest_with_routing->Answer(9032, 2, "/services/script1",
-                                 HTTP_METHOD::GET);
+    usvc.Answer(9032, 2, "/services/script1",
+                HTTP_METHOD::GET);
 
-  return 0;
+    return 0;
 }

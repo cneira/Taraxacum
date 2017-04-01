@@ -7,7 +7,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
-find_package(Boost REQUIRED COMPONENTS )
+find_package(Boost REQUIRED COMPONENTS)
 find_package(RapidJSON)
 
 if (RapidJSON_FOUND)
@@ -42,20 +42,20 @@ INSTALL(
 
 
 include_directories("/usr/local/include" "/usr/include" )
-set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h)
-set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp )
-set(SOURCE_FILES_SHELL_MICROSERVICE  examples/Rest/Script_Microservice.cpp)
+set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h include/InfluxDB.h)
+set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp include/InfluxDB.h)
+set(SOURCE_FILES_SHELL_MICROSERVICE examples/Rest/Script_Microservice.cpp include/InfluxDB.h)
 
 
 add_executable(Rest_example ${SOURCE_FILES})
 
-target_link_libraries(Rest_example net_static pthread)
+target_link_libraries(Rest_example net_static pthread boost_system)
 
 add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
 
-target_link_libraries(Rest_routing_Example net_static pthread)
+target_link_libraries(Rest_routing_Example net_static pthread boost_system)
 
 add_executable(Script_Microservice ${SOURCE_FILES_SHELL_MICROSERVICE})
 
-target_link_libraries(Script_Microservice net_static pthread)
+target_link_libraries(Script_Microservice net_static pthread boost_system)
 

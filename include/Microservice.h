@@ -23,6 +23,7 @@
 
 #include "CircuitBreaker.h"
 #include "Logging.h"
+#include "Metrics.h"
 #include "Uservice_Interface.h"
 #include "pstream.h"
 #include "rapidjson/document.h"
@@ -35,18 +36,19 @@
 #include <fstream>
 #include <sstream>
 
-using namespace Net::Rest;
 namespace Taraxacum {
-
+    using namespace Net::Rest;
 
     template<typename F>
-    class Microservice : public Uservice, public Http::Handler {
+    class Microservice : public Http::Handler, public Uservice {
     private:
-        std::string microservice_response;
+        std::string res, name, data;
+        double response_time;
 
         void onRequest(const Http::Request &Request, Http::ResponseWriter response) {
-            microservice_response = F()(Request.body());
-            response.send(Http::Code::Ok, microservice_response);
+            res = F()(Request.body());
+            response.send(Http::Code::Ok, res);
+            name = F().name;
         }
 
     public:
@@ -69,7 +71,7 @@ namespace Taraxacum {
     };
 
     template<void (*F)(const Rest::Request &, Http::ResponseWriter)>
-    class Routing_Microservice : public Uservice {
+    class Routing_Microservice {
     private:
         std::string microservice_response;
 
@@ -82,7 +84,6 @@ namespace Taraxacum {
 
                 Router router;
                 std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
-                std::cout << "Http Endpoint starting" << std::endl;
                 Net::Port _port(port);
                 Net::Address addr(Net::Ipv4::any(), port);
                 httpEndpoint = std::make_shared<Net::Http::Endpoint>(addr);
@@ -123,10 +124,9 @@ namespace Taraxacum {
  to a microservice.
  the last class instantiated should always be the Microservice.
  Example:
- AddProviders<Publisher,Logging,CircuitBreaker,Microservice<yourfunctorthatyouwillservice>>();
+ AddProviders<Publisher,Logging,CircuitBreaker,Microservice<your business logic>>();
 */
 
-//
     template<typename T>
     std::shared_ptr<T> AddProviders_shared() {
         return std::make_shared<T>();
@@ -137,45 +137,42 @@ namespace Taraxacum {
         return std::make_shared<T>(T(AddProviders_shared<Arg1, Args...>()));
     }
 
+    namespace Non_Routing {
+
 /*
-   Template for microservices, in this case this service will handle json
-   requests.
-   The caller just needs to define a functor that takes a ref to a json document
-   as parameter.
+   The caller just needs to define a functor that takes a reference to a rapidjson::Document,
+   functor will be in charge of updating or generating a new json document.
 */
 
-    template<typename F>
-    struct RestService {
-        const std::string operator()(std::string http_request) {
+        template<typename F>
+        struct RestService {
+            const std::string operator()(std::string http_request) {
 
-            rapidjson::Document d;
-            if (d.Parse(http_request.data()).HasParseError()) {
-                std::stringstream ss;
-                ss << "{\"errcode:\"" << (unsigned) d.GetErrorOffset()
-                   << ", \"errmsg\":" << rapidjson::GetParseError_En(d.GetParseError())
-                   << "}";
-                return ss.str();
-            }
+                rapidjson::Document d;
+                if (d.Parse(http_request.data()).HasParseError()) {
+                    std::stringstream ss;
+                    ss << "{\"errcode:\"" << (unsigned) d.GetErrorOffset()
+                       << ", \"errmsg\":" << rapidjson::GetParseError_En(d.GetParseError())
+                       << "}";
+                    return ss.str();
+                }
 
-            F()(d);
-            rapidjson::StringBuffer buffer;
-            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-            d.Accept(writer);
-            return buffer.GetString();
+                F()(d);
+                rapidjson::StringBuffer buffer;
+                rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+                d.Accept(writer);
+                return buffer.GetString();
+            };
         };
-    };
+    }
+    namespace Routing {
 
-    namespace uServices {
-
-
-        /*
-       This micro service will parse a config.json file and execute the cmd
-       especified in cmd key.
-       The json response will be : { "cmd_output": <command output> , "err": <err
-       msg if any>  }
-      */
-        void ShellCmd(const Rest::Request &request,
-                      Http::ResponseWriter response) {
+/*
+This micro service will parse a config.json file and execute the cmd
+especified in cmd key.
+The json response will be : { "cmd_output": <command output> , "err": <errmsg if any>  }
+*/
+        void ShellCmd(const Rest::Request &request, Http::ResponseWriter response) {
 
             FILE *fp = fopen("./config.json", "rb");
             if (fp == nullptr) {
@@ -189,61 +186,66 @@ namespace Taraxacum {
             char readBuffer[65536];
             rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
             rapidjson::Document d;
-
+            std::stringstream ss;
             if (d.ParseStream(is).HasParseError()) {
-                std::stringstream ss;
+
                 ss << "{\"errcode:\"" << (unsigned) d.GetErrorOffset()
                    << ", \"errmsg\":" << rapidjson::GetParseError_En(d.GetParseError())
                    << "}";
                 response.send(Http::Code::Ok, ss.str());
                 fclose(fp);
             }
-            rapidjson::Value &s = d["cmd"];
+            if (d.HasMember("cmd")) {
+                rapidjson::Value &s = d["cmd"];
 
-            redi::ipstream proc(s.GetString(),
-                                redi::pstreams::pstdout | redi::pstreams::pstderr);
-            std::string line;
-            std::stringstream ssout, sserr, jresp;
+                redi::ipstream proc(s.GetString(),
+                                    redi::pstreams::pstdout | redi::pstreams::pstderr);
+                std::string line;
+                std::stringstream ssout, sserr, jresp;
 
-            while (std::getline(proc.out(), line))
-                ssout << line;
+                while (std::getline(proc.out(), line))
+                    ssout << line;
 
-            while (std::getline(proc.err(), line))
-                sserr << line;
+                while (std::getline(proc.err(), line))
+                    sserr << line;
 
-            jresp << "{ \"cmd\":"
-                  << "\" " << ssout.str() << "\""
-                  << ", \"err\":"
-                  << "\"" << sserr.str() << "\""
-                          "}";
-            fclose(fp);
-            response.send(Http::Code::Ok, jresp.str());
+                jresp << "{ \"cmd\":"
+                      << "\" " << ssout.str() << "\""
+                      << ", \"err\":"
+                      << "\"" << sserr.str() << "\""
+                              "}";
+                fclose(fp);
+                response.send(Http::Code::Ok, jresp.str());
+            } else {
+                fclose(fp);
+                ss << "{\"errcode:\"" << "001"
+                   << ", \"errmsg\":" << "config.json does not have cmd key"
+                   << "}";
+                response.send(Http::Code::Ok, ss.str());
+            }
+
         }
     }
 
-
-}
-
-
-namespace Tools {
-    void hexdump(void *ptr, int buflen) {
-        unsigned char *buf = (unsigned char *) ptr;
-        int i, j;
-        for (i = 0; i < buflen; i += 16) {
-            printf("%06x: ", i);
-            for (j = 0; j < 16; j++)
-                if (i + j < buflen)
-                    printf("%02x ", buf[i + j]);
-                else
-                    printf("   ");
-            printf(" ");
-            for (j = 0; j < 16; j++)
-                if (i + j < buflen)
-                    printf("%c", isprint(buf[i + j]) ? buf[i + j] : '.');
-            printf("\n");
+    namespace Tools {
+        void hexdump(void *ptr, int buflen) {
+            unsigned char *buf = (unsigned char *) ptr;
+            int i, j;
+            for (i = 0; i < buflen; i += 16) {
+                printf("%06x: ", i);
+                for (j = 0; j < 16; j++)
+                    if (i + j < buflen)
+                        printf("%02x ", buf[i + j]);
+                    else
+                        printf("   ");
+                printf(" ");
+                for (j = 0; j < 16; j++)
+                    if (i + j < buflen)
+                        printf("%c", isprint(buf[i + j]) ? buf[i + j] : '.');
+                printf("\n");
+            }
         }
     }
 }
-
 
 #endif // USERVICES_MICROSERVICE_H

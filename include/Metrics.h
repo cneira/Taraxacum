@@ -24,13 +24,16 @@
 
 #include "Uservice_Interface.h"
 
+
 class Metrics : public Provider {
 public:
     Metrics(std::shared_ptr<Uservice_Interface> usvc) : Provider(usvc) {};
-    void Measure() {
-        Provider::Measure();
-        std::cout << "Metrics Here" << std::endl;
+
+    void Measure(const std::string data) {
+        Provider::Measure(data);
+
     }
 };
+
 
 #endif //USERVICES_METRICS_H
