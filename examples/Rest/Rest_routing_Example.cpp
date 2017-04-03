@@ -18,29 +18,15 @@
  */
 
 #include <Microservice.h>
-#include <iostream>
 #include <InfluxDB.h>
-#include "InfluxDB.h"
+#include <ppconsul/agent.h>
 
 namespace uRest {
-    InfluxDB inflx;
-    std::string data;
 
     void biz(const Rest::Request &request, Http::ResponseWriter response) {
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        response.send(Http::Code::Ok, "Here is routing");
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        double response_time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0;
-        data = "response_time,host=server02 value=" + std::to_string(response_time);
-        inflx.Write(data);
-        inflx.Query("select * ");
+        response.send(Http::Code::Ok, "Here is my response");
     };
 
-    struct aux {
-        const void operator()(const Rest::Request &request, Http::ResponseWriter response) {
-            response.send(Http::Code::Ok, "Here is routing functor");
-        }
-    };
 }
 
 int main() {
