@@ -70,7 +70,7 @@ private:
     void Loadconfig() {
         std::stringstream ss;
         std::cout << "loading Consul data" << std::endl;
-        FILE *fp = fopen("/opt/app/bin/config.json", "rb");
+        FILE *fp = fopen("./config.json", "rb");
         if (fp == nullptr) {
             ss << "Exception opening/reading configuration file" << std::endl;
             ss << "Is config.json created ?" << std::endl;

@@ -22,7 +22,7 @@
 #include <ppconsul/agent.h>
 #include <ServiceDiscovery.h>
 #include <csignal>
-
+#include <cstdlib>
 namespace uRest {
 
     std::string data;
@@ -52,15 +52,19 @@ namespace uRest {
 int main() {
     using namespace Taraxacum;
     auto usvc = Routing_Microservice<uRest::biz>();
-    uRest::Influx.Query("q=CREATE DATABASE sol01");
+    uRest::Influx.Query("q=CREATE DATABASE sol02");
+    std::string port = "9032";
+    if(const char* env_p = std::getenv("PORT"))
+    {
+        std::cout << "Your PATH is: " << env_p << '\n';
+        port = env_p;
+    }
 
-    std::cout << "Start answering requets on port 9032, using 2 threads and on "
-            "the route \"/stars/response\" using http GET"
-              << std::endl;
+
 
     signal(SIGHUP, uRest::signalHandler);
 
-    usvc.Answer(9032, 2, "/solutions/app1", HTTP_METHOD::GET);
+    usvc.Answer(atoi(port.data()), 2, "/solutions/app1", HTTP_METHOD::GET);
 
     return 0;
 }

@@ -17,7 +17,7 @@ private:
 
     void Loadconfig() {
         std::cout << "loading data" << std::endl;
-        FILE *fp = fopen("/opt/app/bin/config.json", "rb");
+        FILE *fp = fopen("./config.json", "rb");
         if (fp == nullptr) {
             ss << "Exception opening/reading configuration file" << std::endl;
             ss << "Is config.json created ?" << std::endl;
@@ -117,6 +117,7 @@ public:
         boost::asio::io_service ios;
         boost::asio::ip::tcp::resolver r{ios};
         boost::asio::ip::tcp::socket sock{ios};
+        std::cout << "Connecting to " << influx_host << " port:" << influx_port << std::endl;
         try {
             boost::asio::connect(sock,
                                  r.resolve(boost::asio::ip::tcp::resolver::query{
@@ -130,6 +131,9 @@ public:
         // Send HTTP request using beast
         req.method = "POST";
         req.url = "/query";
+        req.fields.replace("User-Agent", "Beast");
+        req.fields.insert("Content-Type", "application/x-www-form-urlencoded");
+        req.fields.insert("Accept"," */*");
         req.version = 11;
         req.body = query;
         req.fields.replace("Host", influx_host + ":" +
