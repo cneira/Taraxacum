@@ -39,18 +39,6 @@ INSTALL(
 
 
 
-ADD_LIBRARY(ppconsul_library STATIC IMPORTED)
-SET_TARGET_PROPERTIES(ppconsul_library PROPERTIES
-        IMPORTED_LOCATION /home/cnb/ppconsul/build/output/libppconsul.a)
-
-
-ADD_LIBRARY(json11_library STATIC IMPORTED)
-SET_TARGET_PROPERTIES(json11_library PROPERTIES
-        IMPORTED_LOCATION /home/cnb/ppconsul/build/output/libjson11.a)
-
-
-
-
 include_directories("/usr/local/include" "/usr/include" )
 set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h include/InfluxDB.h include/ServiceDiscovery.h)
 set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp include/InfluxDB.h include/ServiceDiscovery.h)
@@ -60,18 +48,18 @@ set(SOURCE_FILES_AUTOPILOT examples/Rest/autopilot.cpp include/InfluxDB.h includ
 
 add_executable(Rest_example ${SOURCE_FILES})
 
-target_link_libraries(Rest_example net_static pthread boost_system ppconsul_library json11_library curl )
+target_link_libraries(Rest_example net_static pthread boost_system  curl )
 
 add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
 
-target_link_libraries(Rest_routing_Example net_static pthread boost_system ppconsul_library json11_library curl)
+target_link_libraries(Rest_routing_Example net_static pthread boost_system  curl)
 
 add_executable(Script_Microservice ${SOURCE_FILES_SHELL_MICROSERVICE})
 
-target_link_libraries(Script_Microservice net_static pthread boost_system ppconsul_library json11_library curl)
+target_link_libraries(Script_Microservice net_static pthread boost_system  curl)
 
 
 add_executable(autopilot ${SOURCE_FILES_AUTOPILOT})
 
-target_link_libraries(autopilot net_static pthread boost_system ppconsul_library json11_library curl)
+target_link_libraries(autopilot net_static pthread boost_system curl)
 
