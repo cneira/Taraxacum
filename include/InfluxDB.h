@@ -17,7 +17,7 @@ private:
 
     void Loadconfig() {
         std::cout << "loading data" << std::endl;
-        FILE *fp = fopen("./config.json", "rb");
+        FILE *fp = fopen("/opt/app/bin/config.json", "rb");
         if (fp == nullptr) {
             ss << "Exception opening/reading configuration file" << std::endl;
             ss << "Is config.json created ?" << std::endl;
@@ -83,7 +83,7 @@ public:
 
             // Send HTTP request using beast
             req.method = "POST";
-            req.url = "/write?db=sensors" ;
+            req.url = "/write?db=" + influx_db ;
             req.version = 11;
             req.fields.replace("Host", influx_host + ":" +
                                        boost::lexical_cast<std::string>(
@@ -111,8 +111,9 @@ public:
 
     }
 
+
     const std::string Query(const std::string query) {
-        beast::http::request<beast::http::empty_body> req;
+        beast::http::request<beast::http::string_body> req;
         boost::asio::io_service ios;
         boost::asio::ip::tcp::resolver r{ios};
         boost::asio::ip::tcp::socket sock{ios};
@@ -127,9 +128,10 @@ public:
         }
 
         // Send HTTP request using beast
-        req.method = "GET";
-        req.url = "/query?db=" + influx_db + query;
+        req.method = "POST";
+        req.url = "/query";
         req.version = 11;
+        req.body = query;
         req.fields.replace("Host", influx_host + ":" +
                                    boost::lexical_cast<std::string>(
                                            sock.remote_endpoint().port()));

@@ -27,7 +27,7 @@ namespace uRest {
 
     std::string data;
     Consuld consul;
-
+    InfluxDB Influx;
     void biz(const Rest::Request &request, Http::ResponseWriter response) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         response.send(Http::Code::Ok, "Here is routing");
@@ -35,6 +35,7 @@ namespace uRest {
         double response_time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0;
         data = "response_time,host=server02 value=" + std::to_string(response_time);
         std::cout << "Sending Data to Influx " << data <<std::endl;
+        Influx.Write(data);
 
     };
 
@@ -50,8 +51,8 @@ namespace uRest {
 
 int main() {
     using namespace Taraxacum;
-
     auto usvc = Routing_Microservice<uRest::biz>();
+    uRest::Influx.Query("q=CREATE DATABASE sol01");
 
     std::cout << "Start answering requets on port 9032, using 2 threads and on "
             "the route \"/stars/response\" using http GET"

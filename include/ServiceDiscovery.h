@@ -70,7 +70,7 @@ private:
     void Loadconfig() {
         std::stringstream ss;
         std::cout << "loading Consul data" << std::endl;
-        FILE *fp = fopen("./config.json", "rb");
+        FILE *fp = fopen("/opt/app/bin/config.json", "rb");
         if (fp == nullptr) {
             ss << "Exception opening/reading configuration file" << std::endl;
             ss << "Is config.json created ?" << std::endl;
@@ -105,10 +105,10 @@ private:
 
         } else {
             fclose(fp);
-            std::cout << "config.json should have a key named Influx with the "
+            std::cout << "config.json should have a key named Consuld with the "
                     "following format "
                       << std::endl;
-            std::cout << "\"Influx\": [\"host\",\"port\",\"mydb\",\"url\"]\" "
+            std::cout << "\"Consuld\": [\"host\",\"port\",\"mydb\",\"url\"]\" "
                       << std::endl;
         }
     }
