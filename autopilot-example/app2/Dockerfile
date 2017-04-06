@@ -20,7 +20,7 @@ RUN export CP_SHA1=c1bcd137fadd26ca2998eec192d04c08f62beb1f \
 
 # COPY ContainerPilot configuration
 ENV CONTAINERPILOT_PATH=/etc/containerpilot.json
-ENV PORT=9032
+ENV PORT=8040
 ENV CONFIG=/opt/app/bin/config.json
 COPY containerpilot.json ${CONTAINERPILOT_PATH}
 ENV CONTAINERPILOT=file://${CONTAINERPILOT_PATH}

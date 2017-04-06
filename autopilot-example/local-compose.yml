@@ -12,7 +12,6 @@ nginx:
       /bin/containerpilot
       -config file:///etc/containerpilot/containerpilot.json
         nginx -g "daemon off;"
-
 consul:
   image: autopilotpattern/consul:0.7r0.7
   restart: always
@@ -50,9 +49,11 @@ app1:
     - INFLUXDB_PWD=root
   expose:
     - "9032"
+  ports:
+    - "9032:9032"
   restart: always
 app2:
-  build: ./app1
+  build: ./app2
   links:
     - consul:consul
   environment:

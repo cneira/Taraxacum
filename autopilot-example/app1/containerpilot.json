@@ -4,7 +4,7 @@
     {
       "name": "app1",
       "port": {{.PORT}},
-      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/app1",
+      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/solution",
       "poll": 3,
       "ttl": 10
     }
@@ -25,14 +25,7 @@
   "telemetry": {
     "port": 9090,
     "sensors": [
-      {
-        "name": "app1_connections_unhandled_total",
-        "help": "Number of accepted connections that were not handled",
-        "type": "gauge",
-        "poll": 5,
-        "check": ["/opt/app/bin/sensor.sh", "unhandled"]
-      },
-      {
+        {
         "name": "app1_clients_connected",
         "help": "active connections ",
         "type": "gauge",
