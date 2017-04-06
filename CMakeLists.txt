@@ -43,7 +43,8 @@ include_directories("/usr/local/include" "/usr/include" )
 set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h include/InfluxDB.h include/ServiceDiscovery.h)
 set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp include/InfluxDB.h include/ServiceDiscovery.h)
 set(SOURCE_FILES_SHELL_MICROSERVICE examples/Rest/Script_Microservice.cpp include/InfluxDB.h include/ServiceDiscovery.h)
-set(SOURCE_FILES_AUTOPILOT examples/Rest/autopilot.cpp include/InfluxDB.h include/ServiceDiscovery.h)
+set(SOURCE_FILES_APP1 examples/Rest/app1.cpp include/InfluxDB.h include/ServiceDiscovery.h)
+set(SOURCE_FILES_APP2 examples/Rest/app2.cpp include/InfluxDB.h include/ServiceDiscovery.h)
 
 
 add_executable(Rest_example ${SOURCE_FILES})
@@ -59,7 +60,11 @@ add_executable(Script_Microservice ${SOURCE_FILES_SHELL_MICROSERVICE})
 target_link_libraries(Script_Microservice net_static pthread boost_system  curl)
 
 
-add_executable(autopilot ${SOURCE_FILES_AUTOPILOT})
+add_executable(app1 ${SOURCE_FILES_APP1})
 
-target_link_libraries(autopilot net_static pthread boost_system curl)
+target_link_libraries(app1  net_static pthread boost_system curl)
 
+
+add_executable(app2 ${SOURCE_FILES_APP2})
+
+target_link_libraries(app2 net_static pthread boost_system curl)
