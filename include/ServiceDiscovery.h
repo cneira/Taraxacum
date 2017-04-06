@@ -147,7 +147,10 @@
         };
     public:
         Consuld() { Loadconfig(); }
-
+        const std::string getport() { return port;}
+        const std::string  geturl() {return url;}
+        const std::string gethost() {return host;}
+        void sethost(const std::string _host) { host = _host;}
         Consuld(const std::string url_, const std::string host_, const std::string port_) : url(url_), host(host_),
                                                                                             port(port_) {};
 

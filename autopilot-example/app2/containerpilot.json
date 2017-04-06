@@ -1,0 +1,51 @@
+{
+  "consul": "localhost:8500",
+  "services": [
+    {
+      "name": "app2",
+      "port": {{.PORT}},
+      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/app2",
+      "poll": 3,
+      "ttl": 10
+    }
+  ],
+  "coprocesses": [
+    {
+      "command": ["/usr/local/bin/consul", "agent",
+                  "-data-dir=/data",
+                  "-config-dir=/config",
+                  "-log-level=err",
+                  "-rejoin",
+                  "-retry-join", "{{ if .CONSUL_HOST }}{{ .CONSUL_HOST }}{{ else }}consul{{ end }}",
+                  "-retry-max", "10",
+                  "-retry-interval", "10s"],
+      "restarts": "unlimited"
+    }
+  ],
+  "telemetry": {
+    "port": 9090,
+    "sensors": [
+      {
+        "name": "app2_connections_unhandled_total",
+        "help": "Number of accepted connections that were not handled",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/opt/app/bin/sensor.sh", "unhandled"]
+      },
+      {
+        "name": "app2_clients_connected",
+        "help": "active connections ",
+        "type": "gauge",
+        "poll": 5,
+        "check": ["/opt/app/bin/sensor.sh", "clients_connected"]
+      }
+    ]
+  },
+  "backends": [
+    {
+      "name": "influxdb",
+      "poll": 3,
+      "onChange": "pkill -SIGHUP node"
+    }
+  ]
+}

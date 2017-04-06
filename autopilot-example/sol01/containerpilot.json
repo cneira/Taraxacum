@@ -2,9 +2,9 @@
   "consul": "localhost:8500",
   "services": [
     {
-      "name": "sol01",
+      "name": "app1",
       "port": {{.PORT}},
-      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/solutions/app1",
+      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/app1",
       "poll": 3,
       "ttl": 10
     }
@@ -26,14 +26,14 @@
     "port": 9090,
     "sensors": [
       {
-        "name": "solution01_connections_unhandled_total",
+        "name": "app1_connections_unhandled_total",
         "help": "Number of accepted connections that were not handled",
         "type": "gauge",
         "poll": 5,
         "check": ["/opt/app/bin/sensor.sh", "unhandled"]
       },
       {
-        "name": "solution01_clients_connected",
+        "name": "app1_clients_connected",
         "help": "active connections ",
         "type": "gauge",
         "poll": 5,
@@ -42,6 +42,11 @@
     ]
   },
   "backends": [
+    {
+      "name": "app2",
+      "poll": 3,
+      "onChange": "pkill -SIGHUP node"
+    },
     {
       "name": "influxdb",
       "poll": 3,

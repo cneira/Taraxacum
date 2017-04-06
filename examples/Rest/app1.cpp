@@ -25,7 +25,7 @@
 #include <cstdlib>
 
 namespace {
-	const std::string GetHttp(const std::string url, const std::string host, const std::string port) {
+	const std::string GetHttp2(const std::string url, const std::string host, const std::string port) {
 		beast::http::request<beast::http::empty_body> req;
 		boost::asio::io_service ios;
 		boost::asio::ip::tcp::resolver r{ios};
@@ -79,7 +79,8 @@ namespace uRest {
 	InfluxDB Influx;
 	void biz(const Rest::Request &request, Http::ResponseWriter response) {
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		response.send(Http::Code::Ok, "{ \"status\": \"ok\", \"arf\": \"110020330303040430304@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@95003232323232323232332@\", \"microservice_name\": \"app1\"");
+		std::string app2_response = GetHttp2("/app2",consul.gethost(),"8040");
+		response.send(Http::Code::Ok, "{ \"status\": \"ok\", \"arf\": \"110020330303040430304@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@" + app2_response +  "95003232323232323232332@\", \"microservice_name\": \"app1\"");
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 		double response_time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0;
 		data = "response_time,host=server02 value=" + std::to_string(response_time);
@@ -92,6 +93,7 @@ namespace uRest {
 	void signalHandler(int signum) {
 		std::cout << "Interrupt signal (" << signum << ") received.\n";
 		std::string v = consul.Upstream();
+		consul.sethost(v) ;
 		std::cout << "Reloading Consul data: New upstream " << v << std::endl;
 
 	}

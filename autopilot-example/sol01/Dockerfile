@@ -30,5 +30,5 @@ RUN mkdir -p /opt/app/bin
 COPY bin/*  /opt/app/bin/ 
 RUN ls /opt/app/bin/*
 
-ENTRYPOINT ["/bin/containerpilot", "/opt/app/bin/autopilot"]
+ENTRYPOINT ["/bin/containerpilot", "/opt/app/bin/app1"]
 CMD [""]

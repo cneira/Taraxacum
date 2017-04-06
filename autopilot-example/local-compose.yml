@@ -41,8 +41,8 @@ influxdb:
     - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
     - INFLUXDB_HTTP_LOG_ENABLED=false
     - INFLUXDB_CONTINUOUS_QUERIES_LOG_ENABLED=false
-sol01:
-  build: ./sol01
+app1:
+  build: ./app1
   links:
     - consul:consul
   environment:
@@ -53,14 +53,15 @@ sol01:
   expose:
     - "9032"
   restart: always
-frontend:
-  build: ./frontend
+app2:
+  build: ./app1
   links:
     - consul:consul
   environment:
+    - PORT=8040
     - CONSUL_HOST=consul
-    - PORT=10001
-  ports:
-    - 10001:10001
+    - INFLUXDB_USER=root
+    - INFLUXDB_PWD=root
+  expose:
+    - "8040"
   restart: always
-
