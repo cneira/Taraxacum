@@ -18,8 +18,6 @@
  */
 
 #include <Microservice.h>
-#include <InfluxDB.h>
-#include <ppconsul/agent.h>
 #include <ServiceDiscovery.h>
 #include <csignal>
 #include <cstdlib>
