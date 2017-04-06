@@ -14,10 +14,17 @@ class InfluxDB {
 private:
     std::string influx_host, influx_db, influx_url, influx_body, influx_port;
     std::stringstream ss;
-
+    FILE* fp = nullptr;
     void Loadconfig() {
         std::cout << "loading data" << std::endl;
-        FILE *fp = fopen("./config.json", "rb");
+         if(const char* env_p = std::getenv("CONFIG"))
+    {
+        std::cout << "Your config.json PATH is: " << env_p << '\n';
+        fp = fopen(env_p, "rb");
+
+    }else {
+        fp = fopen("./config.json", "rb");
+    }
         if (fp == nullptr) {
             ss << "Exception opening/reading configuration file" << std::endl;
             ss << "Is config.json created ?" << std::endl;

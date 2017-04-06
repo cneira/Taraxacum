@@ -1,1 +1,1 @@
-{"cmd" : "uname -a" , "Influx": ["192.168.1.109","8086","sol01"] , "Consuld": [ "192.168.1.109", "8500","/v1/health/service/influxdb"] }
+{"cmd" : "uname -a" , "Influx": ["localhost","8086","sol01"] , "Consuld": [ "localhost", "8500","/v1/health/service/influxdb"] }

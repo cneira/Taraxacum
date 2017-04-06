@@ -56,10 +56,9 @@ int main() {
     std::string port = "9032";
     if(const char* env_p = std::getenv("PORT"))
     {
-        std::cout << "Your PATH is: " << env_p << '\n';
+        std::cout << "Your PORT is: " << env_p << '\n';
         port = env_p;
     }
-
 
 
     signal(SIGHUP, uRest::signalHandler);
