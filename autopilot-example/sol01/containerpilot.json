@@ -46,11 +46,6 @@
       "name": "app2",
       "poll": 3,
       "onChange": "pkill -SIGHUP node"
-    },
-    {
-      "name": "influxdb",
-      "poll": 3,
-      "onChange": "pkill -SIGHUP node"
     }
   ]
 }

@@ -40,12 +40,5 @@
         "check": ["/opt/app/bin/sensor.sh", "clients_connected"]
       }
     ]
-  },
-  "backends": [
-    {
-      "name": "influxdb",
-      "poll": 3,
-      "onChange": "pkill -SIGHUP node"
-    }
-  ]
+  }
 }

@@ -24,23 +24,6 @@ prometheus:
       - consul:consul
     environment:
       - CONSUL=consul
-influxdb:
-  image: autopilotpattern/influxdb
-  ports:
-    - "8086:8086"
-    - "8083:8083"
-  restart: always
-  links:
-    - consul:consul
-  environment:
-    - CONSUL=consul
-    - ADMIN_USER=root
-    - INFLUXDB_INIT_PWD=root
-    - INFLUXDB_ADMIN_ENABLED=true
-    - INFLUXDB_REPORTING_DISABLED=true
-    - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
-    - INFLUXDB_HTTP_LOG_ENABLED=false
-    - INFLUXDB_CONTINUOUS_QUERIES_LOG_ENABLED=false
 app1:
   build: ./app1
   links:
