@@ -28,7 +28,7 @@ namespace uRest {
 
     void biz(const Rest::Request &request, Http::ResponseWriter response) {
         response.send(Http::Code::Ok,
-                      "8000233230445005032332@");
+                      " World");
     };
 
     /* This microservice does not depends on other so, it does not matter to

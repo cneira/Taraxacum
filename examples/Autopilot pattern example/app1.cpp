@@ -88,8 +88,8 @@ namespace uRest {
  * here updating upstream, alwyas we hit the same ip, and no load balancing is performed, so the config.json should be changed to point to nginx node and query consul for that.
  */
         response.send(Http::Code::Ok,
-                      "{ \"status\": \"ok\", \"arf\": \"110020330303040430304@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@357212121212121212134434@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@36100220303030403030403@" +
-                      app2_response + "95003232323232323232332@\", \"microservice_name\": \"app1\"}\n");
+                      "{ \"status\": \"ok\", \"response\": \"hello" +
+                      app2_response+"\", \"microservice_name\": \"app1\"}\n");
     };
 
 
