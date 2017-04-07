@@ -24,8 +24,8 @@ http {
 
 
     {{ if service "app1" }}
-    upstream customers {
-        # write the address:port pairs for each healthy Customers node
+    upstream app1 {
+        # write the address:port pairs for each healthy app1 node
         {{range service "app1"}}
         server {{.Address}}:{{.Port}};
         {{end}}
@@ -46,9 +46,9 @@ http {
         }
 
         {{ if service "app1" }}
-        location ^~ /solution {
-            rewrite ^/solution(/.*)$ $1 break;
-            proxy_pass http://solution;
+        location ^~ /app1 {
+            rewrite ^/app1(/.*)$ $1 break;
+            proxy_pass http://app1;
             proxy_redirect off;
         }{{end}}
     }

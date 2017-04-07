@@ -37,32 +37,33 @@ INSTALL(
         FILES_MATCHING PATTERN "*.h*")
 
 
-
-
-include_directories("/usr/local/include" "/usr/include" )
+include_directories("/usr/local/include" "/usr/include")
 set(SOURCE_FILES examples/Simple_Microservice/Rest_example.cpp include/Uservice_version.h include/InfluxDB.h include/ServiceDiscovery.h)
 set(SOURCE_FILES_REST examples/Rest/Rest_routing_Example.cpp include/InfluxDB.h include/ServiceDiscovery.h)
 set(SOURCE_FILES_SHELL_MICROSERVICE examples/Rest/Script_Microservice.cpp include/InfluxDB.h include/ServiceDiscovery.h)
-set(SOURCE_FILES_APP1 examples/Rest/app1.cpp include/InfluxDB.h include/ServiceDiscovery.h)
-set(SOURCE_FILES_APP2 examples/Rest/app2.cpp include/InfluxDB.h include/ServiceDiscovery.h)
+set(SOURCE_FILES_APP1 "examples/Autopilot pattern example/app1.cpp" include/InfluxDB.h include/ServiceDiscovery.h)
+set(SOURCE_FILES_APP2 "examples/Autopilot pattern example/app2.cpp" include/InfluxDB.h include/ServiceDiscovery.h)
 
 
 add_executable(Rest_example ${SOURCE_FILES})
 
-target_link_libraries(Rest_example net_static pthread boost_system  curl )
+target_link_libraries(Rest_example net_static pthread boost_system curl)
 
 add_executable(Rest_routing_Example ${SOURCE_FILES_REST})
 
-target_link_libraries(Rest_routing_Example net_static pthread boost_system  curl)
+target_link_libraries(Rest_routing_Example net_static pthread boost_system curl)
 
 add_executable(Script_Microservice ${SOURCE_FILES_SHELL_MICROSERVICE})
 
-target_link_libraries(Script_Microservice net_static pthread boost_system  curl)
+target_link_libraries(Script_Microservice net_static pthread boost_system curl)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "autopilot-example/app1/bin")
 
 
 add_executable(app1 ${SOURCE_FILES_APP1})
 
-target_link_libraries(app1  net_static pthread boost_system curl)
+target_link_libraries(app1 net_static pthread boost_system curl)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "autopilot-example/app2/bin")
 
 
 add_executable(app2 ${SOURCE_FILES_APP2})

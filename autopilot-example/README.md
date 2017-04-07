@@ -1,8 +1,7 @@
-# Node.js Microservices in Containers with ContainerPilot
+#  C++ Microservices in Containers with ContainerPilot
 
-Example microservices implementation using Node.js and Docker. Below is an architectural diagram depicting the composition of services that make up the project. When everything is working a frontend web application is accessible that will display a set of graphs using sensor data.
+Example microservices implementation using Taraxacum  and Docker. Below is an architectural diagram depicting the composition of services that make up the project. When everything is working a frontend web application is accessible that will display a set of graphs using sensor data.
 
-![](./project_overview.png)
 
 ## Usage
 
@@ -14,7 +13,7 @@ In local development you can start the microservices by running
 $ docker-compose -f local-compose.yml up -d
 ```
 
-Navigate to `http://localhost:10001` in your browser and you will see 3 charts. As data flows into the serializer from the various sensors you will start to see data appear on the charts in real-time.
+Then curl localhost/app1 and you'll get a response composed of strings from app1 and app2
 
 ### Production
 
@@ -27,7 +26,5 @@ $ docker-compose up -d
 ```
 
 ## Credits
-
-This project is inspired by various microservices workshops and trainings. In no particular order, they are:
-* https://github.com/lloydbenson/microservices-workshop - Lloyd Benson
-* https://github.com/nearform/micro-services-tutorial-iot - nearForm
+I used this project as template
+* https://github.com/autopilotpattern/nodejs-example

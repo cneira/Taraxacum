@@ -4,7 +4,7 @@
     {
       "name": "app1",
       "port": {{.PORT}},
-      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/solution",
+      "health": "/usr/bin/curl -o /dev/null --fail -s http://127.0.0.1:{{.PORT}}/app1",
       "poll": 3,
       "ttl": 10
     }

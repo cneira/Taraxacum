@@ -45,12 +45,8 @@ app1:
   environment:
     - PORT=9032
     - CONSUL_HOST=consul
-    - INFLUXDB_USER=root
-    - INFLUXDB_PWD=root
   expose:
     - "9032"
-  ports:
-    - "9032:9032"
   restart: always
 app2:
   build: ./app2
@@ -59,8 +55,6 @@ app2:
   environment:
     - PORT=8040
     - CONSUL_HOST=consul
-    - INFLUXDB_USER=root
-    - INFLUXDB_PWD=root
   expose:
     - "8040"
   restart: always

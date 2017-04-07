@@ -1,1 +1,0 @@
-{"cmd" : "uname -a" , "Influx": ["localhost","8086","sol01"] , "Consuld": [ "localhost", "8500","/v1/health/service/influxdb"] }
